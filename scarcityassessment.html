@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scarcity Mindset Assessment — 10X Transformation</title>
+<meta name="description" content="Discover your dominant scarcity archetype and get a personalized roadmap to 10X results in 12 questions.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #F0D080;
+    --gold-dim: rgba(201,168,76,0.15);
+    --dark: #0D0D0D;
+    --surface: #141414;
+    --surface2: #1C1C1C;
+    --surface3: #282828;
+    --text: #F5F2EC;
+    --text-muted: #8A8580;
+    --text-dim: #555250;
+    --accent: #E8593A;
+    --green: #4CAF77;
+    --green-dim: rgba(76,175,119,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px 80px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  /* ── INTRO SCREEN ── */
+  .intro-screen { animation: fadeUp 0.5s ease both; }
+
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 48px;
+  }
+  .brand-mark {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-mark svg { width: 14px; height: 14px; }
+  .brand-name { font-size: 13px; color: var(--text-muted); letter-spacing: 0.5px; }
+
+  .intro-eyebrow {
+    display: inline-block;
+    font-size: 11px; font-weight: 500; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold);
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.25);
+    padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  .intro-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 6vw, 48px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+  .intro-h1 em { color: var(--gold); font-style: normal; }
+
+  .intro-desc {
+    font-size: 16px; color: var(--text-muted);
+    line-height: 1.7; margin-bottom: 36px;
+    max-width: 480px;
+  }
+
+  .intro-stats {
+    display: flex; gap: 32px;
+    margin-bottom: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat-item { }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 900; color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+
+  .archetypes-preview {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 40px;
+  }
+  .arch-pill {
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .arch-pill-name { font-size: 13px; font-weight: 500; margin-bottom: 3px; color: var(--text); }
+  .arch-pill-desc { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+  .start-btn {
+    width: 100%;
+    background: var(--gold);
+    color: #0D0D0D;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 500;
+    padding: 18px 32px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .start-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .start-btn:active { transform: translateY(0); }
+
+  .privacy-note {
+    text-align: center; font-size: 12px; color: var(--text-dim);
+    margin-top: 14px;
+  }
+
+  /* ── QUIZ SCREEN ── */
+  .quiz-screen { display: none; animation: fadeUp 0.4s ease both; }
+
+  .quiz-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .quiz-brand { font-size: 12px; color: var(--text-dim); letter-spacing: 0.5px; }
+  .quit-btn {
+    background: none; border: none; color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif; font-size: 12px;
+    cursor: pointer; padding: 4px 8px;
+  }
+  .quit-btn:hover { color: var(--text-muted); }
+
+  .progress-wrap { margin-bottom: 36px; }
+  .progress-track {
+    height: 2px; background: var(--surface3);
+    border-radius: 1px; overflow: hidden; margin-bottom: 10px;
+  }
+  .progress-fill {
+    height: 100%; background: var(--gold);
+    border-radius: 1px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .progress-labels {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .progress-counter { font-size: 12px; color: var(--text-dim); }
+  .progress-category {
+    font-size: 11px; font-weight: 500; color: var(--gold);
+    background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.2);
+    padding: 3px 10px; border-radius: 10px; letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 3.5vw, 24px);
+    font-weight: 700; line-height: 1.4;
+    margin-bottom: 28px; color: var(--text);
+  }
+
+  .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+
+  .option {
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 16px 20px;
+    cursor: pointer; display: flex; align-items: center; gap: 16px;
+    transition: all 0.15s; text-align: left;
+    width: 100%;
+  }
+  .option:hover {
+    background: var(--surface3);
+    border-color: rgba(201,168,76,0.25);
+  }
+  .option.selected {
+    background: rgba(201,168,76,0.07);
+    border-color: rgba(201,168,76,0.5);
+  }
+  .option-radio {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    flex-shrink: 0; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .option.selected .option-radio {
+    background: var(--gold); border-color: var(--gold);
+  }
+  .option-radio-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #0D0D0D; opacity: 0; transition: opacity 0.15s;
+  }
+  .option.selected .option-radio-dot { opacity: 1; }
+  .option-text { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+  .option.selected .option-text { color: var(--text); }
+
+  .quiz-nav {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-back {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-muted); font-family: 'DM Sans', sans-serif;
+    font-size: 14px; padding: 12px 20px; border-radius: 10px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .nav-back:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+  .nav-back:disabled { opacity: 0.3; cursor: default; }
+
+  .nav-next {
+    background: var(--gold); color: #0D0D0D;
+    border: none; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    padding: 12px 28px; border-radius: 10px;
+    cursor: pointer; transition: all 0.2s;
+    opacity: 0.35; pointer-events: none;
+  }
+  .nav-next.ready { opacity: 1; pointer-events: all; }
+  .nav-next.ready:hover { background: var(--gold-light); }
+
+  /* ── RESULTS SCREEN ── */
+  .results-screen { display: none; animation: fadeUp 0.5s ease both; }
+
+  .results-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 40px;
+  }
+  .results-brand { font-size: 12px; color: var(--text-dim); }
+  .retake-btn {
+    background: none; border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-muted); font-family: 'DM Sans', sans-serif;
+    font-size: 12px; padding: 6px 14px; border-radius: 8px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .retake-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  .score-section {
+    text-align: center;
+    padding: 40px 0 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 32px;
+  }
+  .score-ring-wrap {
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; position: relative;
+  }
+  .score-ring-svg { transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: var(--surface3); stroke-width: 3; }
+  .score-ring-fill {
+    fill: none; stroke: var(--gold); stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-center {
+    position: absolute; text-align: center;
+  }
+  .score-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; font-weight: 900; color: var(--gold);
+    line-height: 1;
+  }
+  .score-label { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+  .result-intensity {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .result-tagline { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 420px; margin: 0 auto; }
+
+  .archetype-block {
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px; padding: 24px;
+    margin-bottom: 20px;
+  }
+  .arch-eyebrow {
+    font-size: 11px; color: var(--gold); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 8px; font-weight: 500;
+  }
+  .arch-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  .arch-description {
+    font-size: 14px; color: var(--text-muted); line-height: 1.7;
+  }
+
+  .dimensions-block {
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px; padding: 24px;
+    margin-bottom: 20px;
+  }
+  .dim-title { font-size: 13px; font-weight: 500; margin-bottom: 18px; color: var(--text-muted); }
+  .dim-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .dim-row:last-child { margin-bottom: 0; }
+  .dim-label { font-size: 13px; color: var(--text-muted); width: 140px; flex-shrink: 0; }
+  .dim-bar { flex: 1; height: 5px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+  .dim-fill {
+    height: 100%; border-radius: 3px; width: 0;
+    transition: width 1s cubic-bezier(0.4,0,0.2,1);
+    background: var(--gold);
+  }
+  .dim-fill.high { background: #E24B4A; }
+  .dim-fill.low { background: #4CAF77; }
+  .dim-pct { font-size: 12px; font-weight: 500; color: var(--text-muted); width: 34px; text-align: right; }
+
+  .recommendation-block {
+    background: rgba(201,168,76,0.05);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 14px; padding: 24px;
+    margin-bottom: 28px;
+  }
+  .rec-eyebrow {
+    font-size: 11px; color: var(--gold); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 8px; font-weight: 500;
+  }
+  .rec-title { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+  .rec-desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+  .share-section {
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px; padding: 24px;
+    margin-bottom: 20px; text-align: center;
+  }
+  .share-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .share-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .share-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .share-btn {
+    background: var(--surface3); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-muted); font-family: 'DM Sans', sans-serif;
+    font-size: 13px; padding: 10px 18px; border-radius: 10px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .share-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+  .share-btn.copied { color: var(--green); border-color: rgba(76,175,119,0.3); }
+
+  .powered {
+    text-align: center; font-size: 12px; color: var(--text-dim);
+    margin-top: 32px; padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .powered a { color: var(--gold); text-decoration: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 24px 16px 60px; }
+    .intro-stats { gap: 20px; }
+    .archetypes-preview { grid-template-columns: 1fr; }
+    .dim-label { width: 110px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro-screen" id="intro-screen">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 14 14" fill="none">
+          <polygon points="7,1 13,10 1,10" fill="none" stroke="#C9A84C" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <span class="brand-name">THE GROW$X FACTORY</span>
+    </div>
+
+    <div class="intro-eyebrow">Free Scarcity Assessment</div>
+    <h1 class="intro-h1">Discover what's<br>keeping you at <em>1X</em></h1>
+    <p class="intro-desc">12 questions. 4 minutes. A complete map of your scarcity patterns, your dominant archetype, and exactly where to focus to unlock 10X results.</p>
+
+    <div class="intro-stats">
+      <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Questions</div></div>
+      <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Minutes</div></div>
+      <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Archetypes</div></div>
+    </div>
+
+    <div class="archetypes-preview">
+      <div class="arch-pill">
+        <div class="arch-pill-name">The Protector</div>
+        <div class="arch-pill-desc">Fear-driven scarcity. Built to survive, not expand.</div>
+      </div>
+      <div class="arch-pill">
+        <div class="arch-pill-name">The Settler</div>
+        <div class="arch-pill-desc">Worth-driven scarcity. Pre-rejects before the world can.</div>
+      </div>
+      <div class="arch-pill">
+        <div class="arch-pill-name">The Zero-Summer</div>
+        <div class="arch-pill-desc">Lack-driven scarcity. Your win feels like my loss.</div>
+      </div>
+      <div class="arch-pill">
+        <div class="arch-pill-name">The Arsonist</div>
+        <div class="arch-pill-desc">Sabotage-driven. Builds brilliantly, then burns it.</div>
+      </div>
+    </div>
+
+    <!-- Name / email capture -->
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+      <input id="capture-name" type="text" placeholder="Your full name" autocomplete="name"
+        style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:14px 18px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color .2s"
+        onfocus="this.style.borderColor='rgba(201,168,76,0.6)'" onblur="this.style.borderColor='rgba(201,168,76,0.25)'">
+      <input id="capture-email" type="email" placeholder="Your email address" autocomplete="email"
+        style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:14px 18px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color .2s"
+        onfocus="this.style.borderColor='rgba(201,168,76,0.6)'" onblur="this.style.borderColor='rgba(201,168,76,0.25)'">
+    </div>
+    <div id="capture-err" style="font-size:12px;color:#E24B4A;margin-bottom:10px;display:none">Please enter your name and a valid email address.</div>
+
+    <button class="start-btn" onclick="startQuiz()">Start my assessment &rarr;</button>
+    <p class="privacy-note">Your results will be emailed to you and your Grow$X coach.</p>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-screen" id="quiz-screen">
+    <div class="quiz-top">
+      <span class="quiz-brand">10X Scarcity Assessment</span>
+      <button class="quit-btn" onclick="showIntro()">&#8592; Start over</button>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:8%"></div></div>
+      <div class="progress-labels">
+        <span class="progress-counter" id="prog-counter">1 of 12</span>
+        <span class="progress-category" id="prog-cat">Money</span>
+      </div>
+    </div>
+    <div class="question-text" id="question-text"></div>
+    <div class="options-list" id="options-list"></div>
+    <div class="quiz-nav">
+      <button class="nav-back" id="nav-back" onclick="goBack()">&#8592; Back</button>
+      <button class="nav-next" id="nav-next" onclick="goNext()">Next &rarr;</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-screen" id="results-screen">
+    <div class="results-top">
+      <span class="results-brand">10X Scarcity Assessment</span>
+      <button class="retake-btn" onclick="showIntro()">Retake</button>
+    </div>
+    <div class="score-section">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" width="110" height="110" viewBox="0 0 110 110">
+          <circle class="score-ring-bg" cx="55" cy="55" r="45"/>
+          <circle class="score-ring-fill" id="score-ring" cx="55" cy="55" r="45"/>
+        </svg>
+        <div class="score-center">
+          <div class="score-number" id="score-number">0%</div>
+          <div class="score-label">scarcity</div>
+        </div>
+      </div>
+      <div class="result-intensity" id="result-intensity"></div>
+      <div class="result-tagline" id="result-tagline"></div>
+    </div>
+    <div class="archetype-block">
+      <div class="arch-eyebrow">Your dominant archetype</div>
+      <div class="arch-name" id="arch-name"></div>
+      <div class="arch-description" id="arch-desc"></div>
+    </div>
+    <div class="dimensions-block">
+      <div class="dim-title">Pattern breakdown</div>
+      <div id="dim-rows"></div>
+    </div>
+    <div class="recommendation-block">
+      <div class="rec-eyebrow" id="rec-phase"></div>
+      <div class="rec-title" id="rec-title"></div>
+      <div class="rec-desc" id="rec-desc"></div>
+    </div>
+    <div class="share-section" id="send-results-section">
+      <div class="share-title">Get your full results report</div>
+      <div class="share-sub" id="send-results-sub">Send a detailed breakdown to your inbox and your Grow$X coach.</div>
+      <div class="share-btns" id="send-results-btns">
+        <button class="share-btn" id="send-participant-btn" onclick="sendResultsToParticipant()">📧 Send to my inbox</button>
+        <button class="share-btn" id="send-coach-btn" onclick="sendResultsToCoach()">Send to Grow$X Coach</button>
+      </div>
+      <div id="send-both-wrap" style="margin-top:10px">
+        <button class="share-btn" id="send-both-btn" onclick="sendBothEmails()" style="background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.3);color:var(--gold);width:100%;padding:12px">✉ Send to both (recommended)</button>
+      </div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06)">
+        <div class="share-title" style="font-size:13px;margin-bottom:6px">Know someone who needs this?</div>
+        <div class="share-btns">
+          <button class="share-btn" id="copy-btn" onclick="copyLink()">Copy link</button>
+          <button class="share-btn" onclick="shareWhatsApp()">Share on WhatsApp</button>
+        </div>
+      </div>
+    </div>
+    <div class="powered">Built with the <a href="#">10X Transformation System</a> — from scarcity to radical abundance.</div>
+  </div>
+
+</div>
+
+<script>
+
+// ── USER DATA ──────────────────────────────────────────────────────────────
+let userName = '';
+let userEmail = '';
+
+const questions = [
+  { cat: "Money", text: "When you receive unexpected money — a bonus, gift, or windfall — your first instinct is:", options: [
+    { text: "Anxiety — I need to save it all immediately in case things go wrong", score: { fear: 3, lack: 2 } },
+    { text: "Distrust — it feels temporary, something will go wrong soon", score: { fear: 2, worth: 2 } },
+    { text: "Spend it fast before I 'lose' it somehow", score: { sabotage: 3, worth: 1 } },
+    { text: "Excitement and a clear plan for how to use it", score: {} }
+  ]},
+  { cat: "Opportunity", text: "A major opportunity appears — a dream client, a big stage, a huge deal. What happens inside?", options: [
+    { text: "I immediately look for reasons it won't work out", score: { fear: 3, worth: 2 } },
+    { text: "I say yes but secretly wait for it to fall apart", score: { fear: 2, sabotage: 2 } },
+    { text: "I hesitate, thinking someone more qualified should have it", score: { worth: 3, lack: 1 } },
+    { text: "I feel excited and move quickly to seize it", score: {} }
+  ]},
+  { cat: "Worth", text: "When setting your prices or salary expectations, you typically:", options: [
+    { text: "Price below market to avoid rejection or seeming greedy", score: { worth: 3, fear: 1 } },
+    { text: "Agree to whatever is offered, afraid to negotiate", score: { worth: 2, fear: 2 } },
+    { text: "Price fairly but feel guilty when people pay", score: { worth: 3, sabotage: 1 } },
+    { text: "Charge what I'm worth confidently and negotiate freely", score: {} }
+  ]},
+  { cat: "Relationships", text: "When someone around you succeeds big — a friend, colleague, competitor — you feel:", options: [
+    { text: "Genuinely threatened — their win feels like my loss", score: { lack: 3, fear: 1 } },
+    { text: "Motivated but with an undertone of resentment", score: { lack: 2, worth: 1 } },
+    { text: "Happy for them but quietly wondering 'why not me?'", score: { lack: 1, worth: 2 } },
+    { text: "Genuinely inspired — proof of what's possible", score: {} }
+  ]},
+  { cat: "Decisions", text: "When making a significant investment in yourself — coaching, training, tools — you:", options: [
+    { text: "Almost never do it — spending on myself feels wrong or risky", score: { worth: 3, fear: 2 } },
+    { text: "Do it, but feel anxious and try to recover the money fast", score: { fear: 3, sabotage: 1 } },
+    { text: "Only do it when I can justify every penny in advance", score: { fear: 2, lack: 1 } },
+    { text: "Invest freely when the ROI and alignment feel right", score: {} }
+  ]},
+  { cat: "Identity", text: "Finish this sentence honestly: \"People like me don't usually...\"", options: [
+    { text: "...make that kind of money or reach that level of success", score: { worth: 3, lack: 2 } },
+    { text: "...get lucky or have things go easily", score: { fear: 2, lack: 2 } },
+    { text: "...deserve to take up that much space", score: { worth: 3, fear: 1 } },
+    { text: "I don't think this way — I expect success as normal", score: {} }
+  ]},
+  { cat: "Risk", text: "When facing a high-reward, high-risk move — quitting a job, launching a product, making a bold ask:", options: [
+    { text: "I rarely act — the downside feels far more real than the upside", score: { fear: 3, lack: 2 } },
+    { text: "I act but self-sabotage right before the breakthrough", score: { sabotage: 3, worth: 1 } },
+    { text: "I wait until conditions are 'perfect' — which never comes", score: { fear: 2, worth: 1 } },
+    { text: "I assess clearly and move when the opportunity is right", score: {} }
+  ]},
+  { cat: "Receiving", text: "When someone gives you a genuine compliment, unexpected gift, or generous offer:", options: [
+    { text: "I deflect or minimize it immediately", score: { worth: 3, sabotage: 1 } },
+    { text: "I feel suspicious of their motives", score: { fear: 2, worth: 1 } },
+    { text: "I feel I need to immediately give something back to 'balance' it", score: { worth: 2, lack: 2 } },
+    { text: "I receive it gracefully and with genuine gratitude", score: {} }
+  ]},
+  { cat: "Comparison", text: "How often do you check what competitors or peers in your field are doing?", options: [
+    { text: "Constantly — and it usually makes me feel behind or not enough", score: { lack: 3, worth: 2 } },
+    { text: "Regularly — to make sure I'm not losing ground", score: { fear: 2, lack: 1 } },
+    { text: "Occasionally — I notice when I feel threatened", score: { fear: 1, lack: 1 } },
+    { text: "Rarely — I focus on my own path and metrics", score: {} }
+  ]},
+  { cat: "Sabotage", text: "Have you ever been close to a major breakthrough — and then unconsciously slowed down, quit, or ruined it?", options: [
+    { text: "Yes, repeatedly — it's a clear pattern in my life", score: { sabotage: 3, worth: 2 } },
+    { text: "Yes, a few times — I've noticed it but don't know why", score: { sabotage: 2, fear: 1 } },
+    { text: "Maybe once or twice, but I'm not sure", score: { sabotage: 1 } },
+    { text: "No — I push through discomfort and complete things", score: {} }
+  ]},
+  { cat: "Inner voice", text: "How loud is the inner voice that says 'there isn't enough / you're not enough'?", options: [
+    { text: "It runs constantly in the background of my life", score: { fear: 2, worth: 2, lack: 2 } },
+    { text: "It gets very loud under pressure or when things are going well", score: { sabotage: 2, fear: 2 } },
+    { text: "I hear it sometimes but I can challenge it", score: { fear: 1, worth: 1 } },
+    { text: "It rarely shows up — my default is expansive and confident", score: {} }
+  ]},
+  { cat: "Vision", text: "When you imagine your ideal life — wealth, freedom, impact — your honest gut reaction is:", options: [
+    { text: "It feels impossible for someone like me", score: { worth: 3, lack: 2 } },
+    { text: "It feels possible in theory but dangerous to want", score: { fear: 3, worth: 1 } },
+    { text: "It excites me but I expect obstacles to stop me", score: { fear: 2, sabotage: 1 } },
+    { text: "It feels inevitable — I'm on my way there", score: {} }
+  ]}
+];
+
+const archetypes = [
+  { key: "fear", name: "The Protector", desc: "Your scarcity is fear-driven. You've built an elaborate inner security system that mistakes protection for limitation. You're not broken — you're defended. The work is learning that safety and expansion can coexist. Your nervous system needs evidence — not motivation — that abundance is safe." },
+  { key: "worth", name: "The Settler", desc: "Your scarcity lives in self-worth. You're capable of far more than you allow yourself to claim. You deflect, minimize, and pre-reject yourself before the world can. The core work: learning you don't need to earn the right to want more. You were never required to justify your ambition." },
+  { key: "lack", name: "The Zero-Summer", desc: "You operate in a mental economy of fixed resources — if others win, you lose. This creates chronic comparison, resentment, and an invisible ceiling on your own success. The shift: abundance is generative, not divided. Someone else's 10X doesn't reduce yours — it expands what's possible." },
+  { key: "sabotage", name: "The Arsonist", desc: "You're brilliant at building and then burning it down. Your nervous system isn't comfortable at the next level yet, so it creates chaos to return to familiar ground. The work is tolerance — stretching your capacity to hold success without dismantling it. You don't have a capability problem; you have a comfort zone problem." }
+];
+
+let answers = new Array(questions.length).fill(null);
+let current = 0;
+let cachedResults = null; // store computed results for email sending
+
+// ── CAPTURE + START ───────────────────────────────────────────────────────
+function startQuiz() {
+  const nameEl  = document.getElementById('capture-name');
+  const emailEl = document.getElementById('capture-email');
+  const errEl   = document.getElementById('capture-err');
+  const name    = nameEl ? nameEl.value.trim() : '';
+  const email   = emailEl ? emailEl.value.trim() : '';
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  if (!name || !emailOk) {
+    if (errEl) errEl.style.display = 'block';
+    return;
+  }
+  if (errEl) errEl.style.display = 'none';
+  userName  = name;
+  userEmail = email;
+
+  document.getElementById('intro-screen').style.display = 'none';
+  const qs = document.getElementById('quiz-screen');
+  qs.style.display = 'block';
+  renderQuestion();
+}
+
+function showIntro() {
+  answers = new Array(questions.length).fill(null);
+  current = 0;
+  cachedResults = null;
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('intro-screen').style.display = 'block';
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  document.getElementById('prog-fill').style.width = Math.round(((current) / questions.length) * 100) + '%';
+  document.getElementById('prog-counter').textContent = (current + 1) + ' of ' + questions.length;
+  document.getElementById('prog-cat').textContent = q.cat;
+  document.getElementById('question-text').textContent = q.text;
+
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option' + (answers[current] === i ? ' selected' : '');
+    btn.innerHTML = `<span class="option-radio"><span class="option-radio-dot"></span></span><span class="option-text">${o.text}</span>`;
+    btn.onclick = () => selectOption(i);
+    list.appendChild(btn);
+  });
+
+  document.getElementById('nav-back').disabled = current === 0;
+  const nextBtn = document.getElementById('nav-next');
+  nextBtn.textContent = current === questions.length - 1 ? 'See my results' : 'Next →';
+  if (answers[current] !== null) nextBtn.classList.add('ready'); else nextBtn.classList.remove('ready');
+}
+
+function selectOption(i) {
+  answers[current] = i;
+  document.querySelectorAll('.option').forEach((b, idx) => b.classList.toggle('selected', idx === i));
+  document.getElementById('nav-next').classList.add('ready');
+}
+
+function goNext() {
+  if (answers[current] === null) return;
+  if (current < questions.length - 1) { current++; renderQuestion(); }
+  else showResults();
+}
+
+function goBack() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+// ── RESULTS ───────────────────────────────────────────────────────────────
+function showResults() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  const totals = { fear: 0, worth: 0, lack: 0, sabotage: 0 };
+  answers.forEach((ans, qi) => {
+    if (ans === null) return;
+    const sc = questions[qi].options[ans].score || {};
+    Object.keys(sc).forEach(k => { totals[k] = (totals[k] || 0) + sc[k]; });
+  });
+
+  const maxPossible = { fear: 26, worth: 24, lack: 20, sabotage: 20 };
+  const pcts = {};
+  Object.keys(totals).forEach(k => { pcts[k] = Math.round((totals[k] / maxPossible[k]) * 100); });
+
+  const dominant = Object.keys(totals).reduce((a, b) => totals[a] > totals[b] ? a : b);
+  const arch = archetypes.find(a => a.key === dominant);
+
+  const totalScore = Object.values(totals).reduce((a, b) => a + b, 0);
+  const maxTotal = 90;
+  const scarcityPct = Math.round((totalScore / maxTotal) * 100);
+
+  let intensity, recPhase, recTitle, recDesc;
+  if (scarcityPct >= 65) {
+    intensity = "Deep-rooted scarcity";
+    recPhase = "Phase 1 + 2 Priority";
+    recTitle = "Start with the Scarcity Autopsy and Identity Burn";
+    recDesc = "Your scarcity is deeply wired — it needs serious diagnosis and detox work before reprogramming will land. Phases 1 and 2 are your immediate focus. Don't skip the grief work.";
+  } else if (scarcityPct >= 35) {
+    intensity = "Moderate scarcity patterns";
+    recPhase = "Phase 2 + 3 Priority";
+    recTitle = "Detox and neural reprogramming are your leverage point";
+    recDesc = "You have real awareness of your patterns but haven't fully broken the wiring. Phases 2 and 3 will give you the biggest transformation in the shortest time.";
+  } else {
+    intensity = "Mild scarcity residue";
+    recPhase = "Phase 4 + 5 Priority";
+    recTitle = "You're ready to install 10X behaviors directly";
+    recDesc = "Your mindset is largely healthy — the remaining scarcity is behavioral, not foundational. Jump to Phases 4 and 5 to accelerate your results with bold action and momentum.";
+  }
+
+  document.getElementById('result-intensity').textContent = intensity;
+  document.getElementById('result-tagline').textContent = scarcityPct + '% overall scarcity score across money, identity, worth, risk, and self-sabotage patterns.';
+  document.getElementById('arch-name').textContent = arch.name;
+  document.getElementById('arch-desc').textContent = arch.desc;
+  document.getElementById('rec-phase').textContent = recPhase;
+  document.getElementById('rec-title').textContent = recTitle;
+  document.getElementById('rec-desc').textContent = recDesc;
+  document.getElementById('score-number').textContent = scarcityPct + '%';
+
+  const dims = [
+    { label: "Fear-based thinking", key: "fear", pct: pcts.fear },
+    { label: "Self-worth limits",   key: "worth", pct: pcts.worth },
+    { label: "Lack / zero-sum",     key: "lack", pct: pcts.lack },
+    { label: "Self-sabotage",       key: "sabotage", pct: pcts.sabotage }
+  ].sort((a, b) => b.pct - a.pct);
+
+  const dimRows = document.getElementById('dim-rows');
+  dimRows.innerHTML = dims.map(d => `
+    <div class="dim-row">
+      <span class="dim-label">${d.label}</span>
+      <div class="dim-bar"><div class="dim-fill${d.pct > 60 ? ' high' : d.pct < 25 ? ' low' : ''}" data-w="${d.pct}%" style="width:0%"></div></div>
+      <span class="dim-pct">${d.pct}%</span>
+    </div>
+  `).join('');
+
+  setTimeout(() => {
+    const circumference = 283;
+    const offset = circumference - (scarcityPct / 100) * circumference;
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+    document.querySelectorAll('.dim-fill').forEach(el => { el.style.width = el.dataset.w; });
+  }, 100);
+
+  // Cache results for email use
+  cachedResults = { scarcityPct, intensity, arch, recPhase, recTitle, recDesc, dims, pcts };
+
+  // Update send section sub-text with name if available
+  if (userName) {
+    const sub = document.getElementById('send-results-sub');
+    if (sub) sub.textContent = 'Send ' + userName + '\'s results to your inbox and your Grow$X coach.';
+  }
+}
+
+// ── EMAIL HELPERS ─────────────────────────────────────────────────────────
+const COACH_EMAIL = 'execoach@excelounge.com';
+
+function buildParticipantReport() {
+  if (!cachedResults) return '';
+  const { scarcityPct, intensity, arch, recPhase, recTitle, recDesc, dims } = cachedResults;
+  const dimLines = dims.map(d => '  ' + d.label + ': ' + d.pct + '%').join('\n');
+  return (
+    'Dear ' + (userName || 'there') + ',\n\n' +
+    'Thank you for completing the Grow$X Scarcity Mindset Assessment.\n\n' +
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
+    'YOUR RESULTS\n' +
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n' +
+    'Overall Scarcity Score: ' + scarcityPct + '% — ' + intensity + '\n\n' +
+    'DOMINANT ARCHETYPE: ' + arch.name + '\n' +
+    arch.desc + '\n\n' +
+    'PATTERN BREAKDOWN:\n' + dimLines + '\n\n' +
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
+    'YOUR RECOMMENDATION\n' +
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n' +
+    recPhase + '\n' +
+    recTitle + '\n\n' +
+    recDesc + '\n\n' +
+    'Your Grow$X coach will be in touch to discuss your profile and next steps.\n\n' +
+    'The Grow$X Factory\n' +
+    'execoach@excelounge.com\n' +
+    'growxfactory.com'
+  );
+}
+
+function buildCoachReport() {
+  if (!cachedResults) return '';
+  const { scarcityPct, intensity, arch, recPhase, recTitle, dims } = cachedResults;
+  const dimLines = dims.map(d => '  ' + d.label + ': ' + d.pct + '%').join('\n');
+  return (
+    'NEW SCARCITY ASSESSMENT RESULT\n' +
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n' +
+    'Name:  ' + (userName || '(not provided)') + '\n' +
+    'Email: ' + (userEmail || '(not provided)') + '\n\n' +
+    'Overall Scarcity Score: ' + scarcityPct + '% — ' + intensity + '\n' +
+    'Dominant Archetype:     ' + arch.name + '\n\n' +
+    'PATTERN BREAKDOWN:\n' + dimLines + '\n\n' +
+    'RECOMMENDED ENTRY POINT: ' + recPhase + '\n' +
+    recTitle
+  );
+}
+
+function sendResultsToParticipant() {
+  if (!userEmail) { alert('No email address on file. Please retake the assessment and enter your email.'); return; }
+  const subject = encodeURIComponent('Your Scarcity Assessment Results — The Grow$X Factory');
+  const body    = encodeURIComponent(buildParticipantReport());
+  window.location.href = 'mailto:' + encodeURIComponent(userEmail) + '?subject=' + subject + '&body=' + body;
+  markSent('send-participant-btn', 'Sent ✓');
+}
+
+function sendResultsToCoach() {
+  const subject = encodeURIComponent('Scarcity Assessment: ' + (userName || 'New Participant') + ' (' + (cachedResults ? cachedResults.scarcityPct : '?') + '%)');
+  const body    = encodeURIComponent(buildCoachReport());
+  window.open('mailto:' + COACH_EMAIL + '?subject=' + subject + '&body=' + body, '_blank');
+  markSent('send-coach-btn', 'Sent ✓');
+}
+
+function sendBothEmails() {
+  if (!userEmail) { alert('No email address on file. Please retake the assessment and enter your email.'); return; }
+  // Send to participant (CC coach) in one mailto
+  const subject = encodeURIComponent('Your Scarcity Assessment Results — The Grow$X Factory');
+  const body    = encodeURIComponent(buildParticipantReport());
+  const coachSubject = encodeURIComponent('Scarcity Assessment: ' + (userName || 'New Participant') + ' (' + (cachedResults ? cachedResults.scarcityPct : '?') + '%)');
+  const coachBody    = encodeURIComponent(buildCoachReport());
+
+  // Open participant email
+  window.location.href = 'mailto:' + encodeURIComponent(userEmail)
+    + '?cc=' + encodeURIComponent(COACH_EMAIL)
+    + '&subject=' + subject
+    + '&body=' + body;
+
+  // Open coach-only email after short delay
+  setTimeout(function() {
+    window.open('mailto:' + COACH_EMAIL + '?subject=' + coachSubject + '&body=' + coachBody, '_blank');
+  }, 800);
+
+  markSent('send-both-btn', '✉ Both emails opened — check your mail client');
+}
+
+function markSent(btnId, text) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.textContent = text;
+  btn.style.color = '#4CAF77';
+  btn.style.borderColor = 'rgba(76,175,119,0.4)';
+  btn.disabled = true;
+}
+
+function copyLink() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy link'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    prompt('Copy this link:', url);
+  });
+}
+
+function shareWhatsApp() {
+  const url  = encodeURIComponent(window.location.href);
+  const text = encodeURIComponent('Take this free 4-minute scarcity assessment — discover what\'s actually keeping you at 1X: ');
+  window.open('https://wa.me/?text=' + text + url, '_blank');
+}
+
+function shareEmail() {
+  const subject = encodeURIComponent('Discover your scarcity archetype — free 4-min assessment');
+  const body    = encodeURIComponent('I just took this scarcity mindset assessment and it was eye-opening.\n\nTake it here (free, 4 minutes): ' + window.location.href);
+  window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+}
+</script>
+</body>
+</html>
