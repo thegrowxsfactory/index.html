@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Your Energy, Not Just Your Time — The Grow$X Factory</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{--gold:#C9A84C;--gold-l:#E8C97A;--gold-d:#8B6914;--black:#050505;--dark:#0D0D0D;--white:#F5F2EC;--grey:#888880;--dim:#444440;}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;cursor:crosshair;min-height:100vh}
+.cur{width:7px;height:7px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:screen;transition:transform .08s}
+.cur-ring{width:34px;height:34px;border:1px solid rgba(201,168,76,.5);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:transform .22s}
+
+/* NAV */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 52px;background:rgba(5,5,5,.94);border-bottom:1px solid rgba(201,168,76,.1);backdrop-filter:blur(8px);}
+.topbar-brand{font-family:'Archivo',sans-serif;font-size:9px;font-weight:600;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+.topbar-links{display:flex;align-items:center;gap:28px}
+.topbar-links a{font-family:'Archivo',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);text-decoration:none;transition:color .3s}
+.topbar-links a:hover{color:var(--gold)}
+.topbar-cta{color:var(--black)!important;background:var(--gold);padding:8px 20px;font-weight:600;transition:background .3s!important}
+.topbar-cta:hover{background:var(--gold-l)!important}
+.page{padding-top:57px}
+
+/* SCREENS */
+.screen{display:none}
+.screen.active{display:block;animation:fadeUp .4s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── INTRO ── */
+.intro-wrap{min-height:calc(100vh - 57px);display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
+.intro-left{padding:80px 52px;border-right:1px solid rgba(201,168,76,.08);display:flex;flex-direction:column;justify-content:center}
+.intro-eyebrow{font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.intro-eyebrow::before{content:'';width:36px;height:1px;background:var(--gold);flex-shrink:0}
+.intro-title{font-family:'Archivo',sans-serif;font-size:clamp(30px,4.5vw,60px);font-weight:600;line-height:1.06;letter-spacing:-.02em;margin-bottom:8px}
+.intro-title em{font-style:italic;color:var(--gold)}
+.intro-subtitle{font-family:'Archivo',sans-serif;font-size:clamp(14px,2vw,22px);font-weight:300;font-style:italic;color:rgba(245,242,236,.35);margin-bottom:44px;letter-spacing:-.01em}
+.intro-blurb{max-width:480px;margin-bottom:44px}
+.intro-blurb p{font-size:14px;color:var(--grey);line-height:1.9;margin-bottom:14px}
+.intro-blurb p:last-child{margin-bottom:0}
+.intro-blurb strong{color:var(--white);font-weight:500}
+.btn-start{display:inline-flex;align-items:center;gap:14px;background:var(--gold);border:none;color:var(--black);padding:16px 40px;font-family:'Archivo',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:background .3s,transform .25s,gap .25s}
+.btn-start:hover{background:var(--gold-l);transform:translateY(-2px);gap:22px}
+.intro-right{padding:80px 52px;display:flex;flex-direction:column;justify-content:center;gap:28px}
+.intro-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px}
+.istat{border:1px solid rgba(201,168,76,.1);padding:24px 20px;position:relative;overflow:hidden;transition:border-color .3s}
+.istat:hover{border-color:rgba(201,168,76,.35)}
+.istat::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .4s;transform-origin:left}
+.istat:hover::before{transform:scaleX(1)}
+.istat-num{font-family:'Archivo',sans-serif;font-size:40px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:8px;display:block}
+.istat-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.intro-dims{border-top:1px solid rgba(201,168,76,.07);padding-top:24px}
+.intro-dims-label{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-d);margin-bottom:14px;font-family:'Archivo',sans-serif}
+.intro-dim-list{display:flex;flex-wrap:wrap;gap:7px}
+.dim-pill{border:1px solid rgba(201,168,76,.15);padding:5px 13px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey);font-family:'Archivo',sans-serif;transition:border-color .25s,color .25s;cursor:default}
+.dim-pill:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── DIAGNOSTIC ── */
+.diag-topbar{position:sticky;top:57px;z-index:90;background:rgba(5,5,5,.96);border-bottom:1px solid rgba(201,168,76,.07);padding:15px 52px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px}
+.step-lbl{font-family:'Archivo',sans-serif;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.prog-track{height:2px;background:rgba(201,168,76,.1);position:relative}
+.prog-fill{height:100%;background:var(--gold);transition:width .6s cubic-bezier(.4,0,.2,1);position:relative}
+.prog-fill::after{content:'';position:absolute;right:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.18)}
+.prog-pct{font-family:'Archivo',sans-serif;font-size:9px;color:var(--gold);white-space:nowrap}
+.live-meter{padding:11px 52px;background:rgba(10,10,10,.9);border-bottom:1px solid rgba(201,168,76,.05);display:flex;align-items:center;gap:20px}
+.mlabel{font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);font-family:'Archivo',sans-serif;white-space:nowrap}
+.mbars{display:flex;gap:6px;flex:1}
+.mcat{display:flex;align-items:center;gap:6px;flex:1}
+.mcat-name{font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-family:'Archivo',sans-serif;width:50px;flex-shrink:0;transition:color .3s}
+.mcat-track{flex:1;height:3px;background:rgba(201,168,76,.07)}
+.mcat-fill{height:100%;background:var(--gold);transition:width .5s ease;opacity:.55}
+.mcat.mcat-active .mcat-name{color:var(--gold)}
+.mcat.mcat-active .mcat-fill{opacity:1}
+.cat-section{padding:60px 52px 44px;max-width:860px}
+.cat-gtag{display:inline-flex;align-items:center;gap:10px;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-d);margin-bottom:18px;font-family:'Archivo',sans-serif}
+.cat-gtag::before{content:'';width:24px;height:1px;background:var(--gold-d)}
+.cat-name-row{display:flex;align-items:baseline;gap:14px;margin-bottom:10px}
+.cat-name-big{font-family:'Archivo',sans-serif;font-size:clamp(26px,4vw,46px);font-weight:600;letter-spacing:-.02em}
+.cat-name-em{font-family:'Archivo',sans-serif;font-size:clamp(16px,2.2vw,26px);font-weight:300;font-style:italic;color:rgba(201,168,76,.5)}
+.cat-desc{font-size:14px;color:var(--grey);line-height:1.85;max-width:580px;margin-bottom:32px;border-left:1px solid rgba(201,168,76,.22);padding-left:18px}
+.cat-count-badge{display:inline-flex;align-items:center;gap:6px;margin-bottom:28px;font-size:11px;color:var(--dim);font-family:'Archivo',sans-serif;letter-spacing:.08em}
+.ccn{color:var(--gold);font-weight:600;font-size:14px;transition:transform .2s;display:inline-block}
+.check-list{margin-bottom:40px}
+.check-item{display:flex;gap:16px;align-items:flex-start;padding:17px 14px;margin-bottom:6px;border:1px solid rgba(201,168,76,.06);cursor:pointer;transition:border-color .2s,background .2s,transform .15s;position:relative;overflow:hidden}
+.check-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);transform:scaleY(0);transition:transform .25s;transform-origin:bottom}
+.check-item:hover{border-color:rgba(201,168,76,.18);background:rgba(201,168,76,.02)}
+.check-item:hover::before,.check-item.ck{transform:none}
+.check-item.ck::before{transform:scaleY(1)}
+.check-item.ck{border-color:rgba(201,168,76,.14);background:rgba(201,168,76,.035)}
+.check-item:active{transform:scale(.997)}
+.inum{font-family:'Archivo',sans-serif;font-size:9px;color:var(--dim);margin-top:3px;flex-shrink:0;width:14px;letter-spacing:.1em}
+.cb-box{width:20px;height:20px;flex-shrink:0;margin-top:1px;border:1px solid rgba(201,168,76,.28);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.cb-box.ckd{background:var(--gold);border-color:var(--gold)}
+.cb-check{width:5px;height:10px;border-right:2px solid var(--black);border-bottom:2px solid var(--black);transform:rotate(40deg) scale(0) translate(-1px,-1px);transition:transform .18s cubic-bezier(.175,.885,.32,1.275)}
+.cb-box.ckd .cb-check{transform:rotate(40deg) scale(1) translate(-1px,-1px)}
+.itext{font-size:14px;color:var(--grey);line-height:1.7;user-select:none;transition:color .2s}
+.itext.ckd{color:var(--white)}
+.nav-row{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid rgba(201,168,76,.07)}
+.btn-back{background:transparent;border:1px solid rgba(201,168,76,.18);color:var(--grey);padding:11px 26px;font-family:'Archivo',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:border-color .3s,color .3s}
+.btn-back:hover{border-color:var(--gold);color:var(--gold)}
+.btn-next{background:var(--gold);border:none;color:var(--black);padding:13px 38px;font-family:'Archivo',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;font-weight:700;display:flex;align-items:center;gap:10px;transition:background .25s,transform .2s,box-shadow .2s}
+.btn-next:hover{background:var(--gold-l);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,.15)}
+.btn-next-arr{font-size:16px;transition:transform .2s}
+.btn-next:hover .btn-next-arr{transform:translateX(5px)}
+
+/* ── RESULTS ── */
+.res-topbar{background:rgba(5,5,5,.97);border-bottom:1px solid rgba(201,168,76,.1);padding:22px 52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:57px;z-index:90}
+.rts-scores{display:flex;gap:28px;align-items:center}
+.rts{text-align:center}
+.rts-num{font-family:'Archivo',sans-serif;font-size:22px;font-weight:300;color:var(--gold);display:block;line-height:1}
+.rts-label{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+.rts-div{width:1px;height:34px;background:rgba(201,168,76,.12)}
+.res-body{padding:60px 52px 80px;max-width:920px}
+.rl{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:12px;font-family:'Archivo',sans-serif}
+.rl::before{content:'';width:24px;height:1px;background:var(--gold)}
+
+/* SCORE HERO */
+.score-hero{display:grid;grid-template-columns:200px 1fr;gap:52px;align-items:center;margin-bottom:56px;padding-bottom:44px;border-bottom:1px solid rgba(201,168,76,.08)}
+.ring-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.ring-center{position:absolute;text-align:center;pointer-events:none}
+.ring-num{font-family:'Archivo',sans-serif;font-size:44px;font-weight:300;color:var(--gold);line-height:1;display:block}
+.ring-denom{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+.res-badge{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:5px 15px;font-family:'Archivo',sans-serif;font-size:8px;letter-spacing:.28em;text-transform:uppercase;margin-bottom:14px}
+.res-verdict{font-family:'Archivo',sans-serif;font-size:clamp(18px,3vw,28px);font-weight:600;color:var(--white);line-height:1.2;margin-bottom:12px;letter-spacing:-.02em}
+.res-verdict em{color:var(--gold);font-style:italic}
+.res-interp{font-size:13px;color:var(--grey);line-height:1.85;max-width:420px}
+
+/* RADAR */
+.radar-section{margin-bottom:48px}
+.radar-layout{display:grid;grid-template-columns:320px 1fr;gap:36px;align-items:center}
+.rl-item{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.rl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.rl-name{font-family:'Archivo',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);width:72px;flex-shrink:0}
+.rl-bar-wrap{flex:1;height:2px;background:rgba(201,168,76,.08)}
+.rl-bar{height:100%;background:var(--gold);transition:width .8s ease}
+.rl-sc{font-family:'Archivo',sans-serif;font-size:10px;color:var(--dim);margin-left:6px;width:26px;text-align:right}
+
+/* CAT CARDS */
+.cat-cards{margin-bottom:48px}
+.cat-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cc{background:var(--dark);border:1px solid rgba(201,168,76,.07);padding:18px;position:relative;overflow:hidden;transition:border-color .3s,transform .25s}
+.cc:hover{border-color:rgba(201,168,76,.28);transform:translateY(-3px)}
+.cc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .4s;transform-origin:left}
+.cc:hover::before{transform:scaleX(1)}
+.cc-ghost{font-family:'Archivo',sans-serif;font-size:60px;font-weight:700;color:rgba(201,168,76,.03);position:absolute;top:-6px;right:10px;line-height:1;pointer-events:none}
+.cc-group{font-size:7px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-d);font-family:'Archivo',sans-serif;margin-bottom:5px}
+.cc-name{font-family:'Archivo',sans-serif;font-size:14px;font-weight:600;color:var(--white);margin-bottom:3px;position:relative}
+.cc-verdict{font-size:10px;color:var(--grey);margin-bottom:12px}
+.cc-bar-bg{height:2px;background:rgba(201,168,76,.07)}
+.cc-bar-fill{height:100%;background:var(--gold);transition:width 1s cubic-bezier(.4,0,.2,1)}
+.cc-score{font-family:'Archivo',sans-serif;font-size:10px;color:rgba(201,168,76,.4);margin-top:7px}
+
+/* FOCUS */
+.focus-section{margin-bottom:48px}
+.focus-card{padding:22px 26px;margin-bottom:10px;border:1px solid rgba(201,168,76,.07);border-left:2px solid rgba(201,168,76,.3);background:rgba(13,13,13,.6);transition:border-left-color .3s,background .3s}
+.focus-card:hover{border-left-color:var(--gold);background:rgba(13,13,13,.9)}
+.focus-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;gap:14px}
+.focus-card-title{font-family:'Archivo',sans-serif;font-size:14px;font-weight:600;color:var(--white);letter-spacing:-.01em}
+.focus-card-tag{border:1px solid rgba(201,168,76,.18);color:var(--gold-d);font-size:7px;letter-spacing:.18em;text-transform:uppercase;padding:3px 9px;font-family:'Archivo',sans-serif;flex-shrink:0}
+.focus-card-text{font-size:13px;color:var(--grey);line-height:1.85}
+
+/* PROGRAMMES BAND */
+.prog-band{border:1px solid rgba(201,168,76,.18);margin-bottom:32px;display:grid;grid-template-columns:1fr auto;align-items:stretch;overflow:hidden;transition:border-color .4s}
+.prog-band:hover{border-color:rgba(201,168,76,.4)}
+.prog-band-left{padding:36px 40px;border-right:1px solid rgba(201,168,76,.1);position:relative}
+.prog-band-left::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:var(--gold)}
+.prog-band-eyebrow{font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;font-family:'Archivo',sans-serif}
+.prog-band-title{font-family:'Archivo',sans-serif;font-size:19px;font-weight:600;color:var(--white);margin-bottom:10px;letter-spacing:-.01em;line-height:1.25}
+.prog-band-title em{font-style:italic;color:var(--gold)}
+.prog-band-desc{font-size:12px;color:var(--grey);line-height:1.8;max-width:420px}
+.prog-pivots{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px}
+.prog-pivot{border:1px solid rgba(201,168,76,.1);padding:3px 9px;font-size:7px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);font-family:'Archivo',sans-serif;transition:border-color .2s,color .2s}
+.prog-pivot:hover{border-color:rgba(201,168,76,.3);color:var(--gold-d)}
+.prog-band-right{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 36px;gap:10px;min-width:190px;background:rgba(201,168,76,.02)}
+.btn-prog{background:var(--gold);border:none;color:var(--black);padding:13px 24px;font-family:'Archivo',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-weight:700;white-space:nowrap;text-decoration:none;display:block;text-align:center;width:100%;transition:background .3s,transform .2s}
+.btn-prog:hover{background:var(--gold-l);transform:translateY(-1px)}
+.btn-prog-ghost{background:transparent;border:1px solid rgba(201,168,76,.22);color:var(--grey);padding:10px 18px;font-family:'Archivo',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;white-space:nowrap;text-decoration:none;display:block;text-align:center;width:100%;transition:border-color .3s,color .3s}
+.btn-prog-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ACTIONS */
+.actions-section{border-top:1px solid rgba(201,168,76,.08);padding-top:28px;margin-bottom:40px}
+.action-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px 20px;background:transparent;border:1px solid rgba(201,168,76,.09);color:var(--grey);font-family:'Archivo',sans-serif;font-size:11px;letter-spacing:.1em;text-align:left;cursor:pointer;margin-bottom:7px;transition:border-color .25s,color .25s,background .25s,transform .15s}
+.action-btn:hover{border-color:rgba(201,168,76,.35);color:var(--gold-l);background:rgba(201,168,76,.025);transform:translateX(4px)}
+.action-arr{font-size:15px;opacity:.35;transition:opacity .2s,transform .2s}
+.action-btn:hover .action-arr{opacity:.85;transform:translateX(4px)}
+.restart-btn{width:100%;padding:11px;background:transparent;border:1px solid rgba(201,168,76,.07);color:var(--dim);font-family:'Archivo',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;margin-top:6px;transition:border-color .3s,color .3s}
+.restart-btn:hover{border-color:rgba(201,168,76,.25);color:var(--grey)}
+
+/* TICKER */
+.ticker{background:rgba(201,168,76,.04);border-top:1px solid rgba(201,168,76,.09);border-bottom:1px solid rgba(201,168,76,.09);overflow:hidden;padding:10px 0;white-space:nowrap}
+.ticker-inner{display:inline-flex;animation:ticker 30s linear infinite}
+.ti{font-family:'Archivo',sans-serif;font-size:8px;font-weight:600;letter-spacing:.24em;color:rgba(201,168,76,.35);padding:0 38px;text-transform:uppercase}
+.ti::before{content:'◆  '}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.foot{padding:22px 52px;border-top:1px solid rgba(201,168,76,.07);display:flex;align-items:center;justify-content:space-between}
+.foot-brand{font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);font-family:'Archivo',sans-serif}
+.foot-tag{font-size:8px;letter-spacing:.17em;text-transform:uppercase;color:rgba(201,168,76,.22);font-family:'Archivo',sans-serif}
+
+@media(max-width:900px){
+  .topbar-links{display:none}
+  .intro-wrap{grid-template-columns:1fr}
+  .intro-right{display:none}
+  .intro-left,.diag-topbar,.live-meter,.cat-section,.res-topbar,.res-body,.foot{padding-left:24px;padding-right:24px}
+  .score-hero{grid-template-columns:1fr;gap:28px}
+  .radar-layout{grid-template-columns:1fr}
+  .cat-cards-grid{grid-template-columns:repeat(2,1fr)}
+  .prog-band{grid-template-columns:1fr}
+  .prog-band-right{flex-direction:row;padding:20px 24px;flex-wrap:wrap}
+}
+@media(max-width:560px){.cat-cards-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="cur-ring"></div>
+
+<nav class="topbar">
+  <a class="topbar-brand" href="index.html">The Grow$X Factory</a>
+  <div class="topbar-links">
+    <a href="index.html#about">About</a>
+    <a href="index.html#system">The System</a>
+    <a href="index.html#services">Programmes</a>
+    <a href="index.html#begin">Begin</a>
+    <a class="topbar-links topbar-cta" href="index.html#begin" style="font-family:'Archivo',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--black);background:var(--gold);padding:8px 20px;text-decoration:none;transition:background .3s">Activate Your Journey</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- INTRO SCREEN -->
+<div class="screen active" id="screen-intro">
+  <div class="intro-wrap">
+    <div class="intro-left">
+      <div class="intro-eyebrow">Performance Diagnostic · The Grow$X Factory</div>
+      <h1 class="intro-title">Manage your <em>energy,</em><br>not just your time</h1>
+      <div class="intro-subtitle">The self-assessment for leaders who want more</div>
+      <div class="intro-blurb">
+        <p>Most high performers have mastered the calendar. They block time, batch tasks, and run on tight schedules — and still feel like they're running on empty, reacting rather than leading, present in body but absent in mind.</p>
+        <p><strong>Time is finite. Energy is renewable.</strong> Across nine dimensions spanning physical foundation, emotional resilience, mental clarity, purpose, and command of time — this diagnostic reveals exactly where your performance is leaking and what to address first.</p>
+        <p><strong>Five minutes. The truth. Then we rebuild.</strong></p>
+      </div>
+      <button class="btn-start" onclick="startDiag()">Begin your assessment &#8594;</button>
+    </div>
+    <div class="intro-right">
+      <div class="intro-stat-grid">
+        <div class="istat"><span class="istat-num" id="cu1">0</span><div class="istat-label">Dimensions assessed</div></div>
+        <div class="istat"><span class="istat-num" id="cu2">0</span><div class="istat-label">Data points captured</div></div>
+        <div class="istat"><span class="istat-num">5<span style="font-size:18px;font-style:italic;color:rgba(201,168,76,.55)">min</span></span><div class="istat-label">Time to complete</div></div>
+        <div class="istat"><span class="istat-num">10<span style="font-size:18px;font-style:italic;color:rgba(201,168,76,.55)">-X</span></span><div class="istat-label">Your potential ceiling</div></div>
+      </div>
+      <div class="intro-dims">
+        <div class="intro-dims-label">Dimensions measured</div>
+        <div class="intro-dim-list">
+          <div class="dim-pill">Body</div><div class="dim-pill">Emotions</div><div class="dim-pill">Mind</div><div class="dim-pill">Spirit</div><div class="dim-pill">Planning</div><div class="dim-pill">Priorities</div><div class="dim-pill">Focus</div><div class="dim-pill">Boundaries</div><div class="dim-pill">Recovery</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ticker"><div class="ticker-inner"><span class="ti">Energy Management</span><span class="ti">Time Mastery</span><span class="ti">Peak Performance</span><span class="ti">10-X Leadership</span><span class="ti">The Grow$X Factory</span><span class="ti">Foundational Protocols</span><span class="ti">Energy Management</span><span class="ti">Time Mastery</span><span class="ti">Peak Performance</span><span class="ti">10-X Leadership</span><span class="ti">The Grow$X Factory</span><span class="ti">Foundational Protocols</span></div></div>
+  <div class="foot"><div class="foot-brand">The Grow$X Factory © 2025</div><div class="foot-tag">Programmes with the power to change lives</div></div>
+</div>
+
+<!-- DIAGNOSTIC SCREEN -->
+<div class="screen" id="screen-diag">
+  <div class="diag-topbar">
+    <div class="step-lbl" id="stepLbl">Step 1 of 9</div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="prog-pct" id="progPct">0%</div>
+  </div>
+  <div class="live-meter" id="liveMeter">
+    <div class="mlabel">Live</div>
+    <div class="mbars" id="mBars"></div>
+  </div>
+  <div class="cat-section" id="catSection"></div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div class="screen" id="screen-results">
+  <div class="res-topbar" id="resTopbar"></div>
+  <div class="res-body" id="resBody"></div>
+  <div class="ticker"><div class="ticker-inner"><span class="ti">Energy Management</span><span class="ti">Time Mastery</span><span class="ti">Peak Performance</span><span class="ti">10-X Leadership</span><span class="ti">The Grow$X Factory</span><span class="ti">Foundational Protocols</span><span class="ti">Energy Management</span><span class="ti">Time Mastery</span><span class="ti">Peak Performance</span><span class="ti">10-X Leadership</span><span class="ti">The Grow$X Factory</span><span class="ti">Foundational Protocols</span></div></div>
+  <div class="foot"><div class="foot-brand">The Grow$X Factory © 2025</div><div class="foot-tag">Programmes with the power to change lives</div></div>
+</div>
+
+</div>
+
+<script>
+var CATS=[
+  {id:'body',group:'energy',ey:'Energy · 1 of 4',name:'Body',em:'foundation',desc:'Physical energy is the bedrock of all performance. Without it, everything else degrades — thinking, patience, presence. Check each statement currently true for you.',items:["I don't regularly get at least seven to eight hours of sleep, and I often wake up feeling tired.","I frequently skip breakfast, or I settle for something that isn't nutritious.","I don't work out enough — cardiovascular training at least three times a week and strength training at least once a week.","I don't take regular breaks during the day to truly renew and recharge, or I often eat lunch at my desk, if I eat it at all."]},
+  {id:'emotions',group:'energy',ey:'Energy · 2 of 4',name:'Emotions',em:'resilience',desc:'Emotional energy determines the quality of your relationships and ability to perform under pressure. Unchecked, it becomes the silent drain no time-management system can fix.',items:["I frequently find myself feeling irritable, impatient, or anxious at work, especially when work is demanding.","I don't have enough time with my family and loved ones, and when I'm with them, I'm not always really with them.","I have too little time for the activities I most deeply enjoy.","I don't stop frequently enough to express my appreciation to others or to savour my accomplishments and blessings."]},
+  {id:'mind',group:'energy',ey:'Energy · 3 of 4',name:'Mind',em:'clarity',desc:'Mental energy is your capacity for focus, strategy, and creative thought. The modern workplace systematically destroys it — through interruption, distraction, and the tyranny of the urgent.',items:["I have difficulty focusing on one thing at a time, and I am easily distracted during the day, especially by e-mail.","I spend much of my day reacting to immediate crises and demands rather than focusing on activities with longer-term value.","I don't take enough time for reflection, strategising, and creative thinking.","I work in the evenings or on weekends, and I almost never take an e-mail–free vacation."]},
+  {id:'spirit',group:'energy',ey:'Energy · 4 of 4',name:'Spirit',em:'purpose',desc:'Purpose energy is the deepest source of sustained performance. When your work is aligned with your values and sense of meaning, you can sustain effort that others simply cannot.',items:["I don't spend enough time at work doing what I do best and enjoy most.","There are significant gaps between what I say is most important to me and how I actually allocate my time and energy.","My decisions at work are more often influenced by external demands than by a strong, clear sense of my own purpose.","I don't invest enough time and energy in making a positive difference to others or to the world."]},
+  {id:'planning',group:'time',ey:'Time · 1 of 5',name:'Planning',em:'intention',desc:'Without a clear plan, you surrender your day to whoever shouts loudest. Leaders who win time manage it like a scarce asset — with precision, ritual, and deliberate intention.',items:["I start most days without a clear plan of what I need to accomplish.","I rarely review my week ahead on Sunday or Monday morning to set intentions.","I don't consistently use a trusted system to capture tasks, projects, and commitments.","My to-do list is so long it feels overwhelming rather than actionable."]},
+  {id:'priorities',group:'time',ey:'Time · 2 of 5',name:'Priorities',em:'leverage',desc:'Busy is not productive. The highest-leverage leaders have an almost ruthless ability to identify what truly matters and protect their time for it — regardless of what else is clamouring for attention.',items:["I frequently finish the day feeling busy but unsure whether I worked on what mattered most.","I struggle to distinguish between urgent tasks and truly important ones.","I say yes to requests without checking whether they align with my top goals.","I rarely identify my single most important task for the day and protect time for it."]},
+  {id:'focus',group:'time',ey:'Time · 3 of 5',name:'Focus',em:'depth',desc:'Attention is the new oil. The ability to work in a state of deep, uninterrupted concentration is the competitive advantage of the age — and the one most systematically eroded by modern work culture.',items:["I frequently switch between tasks rather than working in sustained, uninterrupted blocks.","Notifications from e-mail, messaging apps, or social media regularly pull me away from deep work.","I find it hard to resist checking my phone or inbox even during important tasks.","Meetings or interruptions fragment my day, leaving little time for concentrated work."]},
+  {id:'boundaries',group:'time',ey:'Time · 4 of 5',name:'Boundaries',em:'ownership',desc:'Your calendar is a declaration of your values. If others fill it before you do, you have abdicated control of your most non-renewable resource. Leaders own their time — or someone else will.',items:["I find it hard to say no to requests, even when I'm already at capacity.","I regularly work outside my intended hours because of poor boundary-setting.","Other people's urgencies frequently override my own planned priorities.","I don't protect time on my calendar for my most important work before others can claim it."]},
+  {id:'recovery',group:'time',ey:'Time · 5 of 5',name:'Recovery',em:'renewal',desc:'Sustainable high performance requires built-in recovery. Leaders who ignore this plateau, then crash. Whitespace is not wasted time. It is where your best thinking lives.',items:["I rarely build genuine recovery time — breaks, whitespace, or transition time — into my day.","I move from one commitment to the next without pausing to reset or reflect.","I don't do a regular weekly review to close loops, update plans, and prepare for the week ahead.","I almost never step back to assess whether how I spend my time reflects what I say matters most."]}
+];
+
+var S={step:0,chk:{}};
+CATS.forEach(function(c){S.chk[c.id]=new Set();});
+function tf(id){return S.chk[id].size;}
+function eT(){return['body','emotions','mind','spirit'].reduce(function(s,id){return s+tf(id);},0);}
+function tT(){return['planning','priorities','focus','boundaries','recovery'].reduce(function(s,id){return s+tf(id);},0);}
+function gT(){return eT()+tT();}
+
+function catV(n){if(n===0)return'Excellent';if(n===1)return'Strong';if(n===2)return'Deficits present';if(n===3)return'Significant deficits';return'Crisis zone';}
+function overallV(n){
+  if(n<=5)return{badge:'Elite performer',verdict:'Your <em>energy and time</em> are well managed.',interp:'You are in the top tier of self-management. Your focus now should be raising the ceiling — deeper purpose, higher leverage, and helping those around you operate at the same level.'};
+  if(n<=12)return{badge:'Strong foundation',verdict:'Solid management with <em>targeted gaps.</em>',interp:'You have real strengths — and a handful of areas quietly costing you performance, presence, and progress. Identify the two or three checks that most surprise you. That is where your 10-X leverage lives.'};
+  if(n<=22)return{badge:'Significant deficits',verdict:'You are performing <em>below your potential.</em>',interp:'The gap between your capability and your current output is real — and closable. The checks you have made reveal the precise patterns holding you back. This is the work that changes everything.'};
+  return{badge:'Performance crisis',verdict:'Your energy and time systems need <em>urgent rebuilding.</em>',interp:'This is not a willpower problem. It is a systems problem. The good news: systems can be rebuilt. The leaders who make the most dramatic transformations often started exactly here.'};
+}
+function insights(){
+  var ins=[];
+  if(tf('body')>=2)ins.push({tag:'Energy foundation',title:'Reclaim your physical operating system',text:'Sleep, movement, and nutrition are performance infrastructure. A leader running on poor sleep makes decisions 20–30% worse. Start here: protect seven hours, move daily, eat before you think.'});
+  if(tf('emotions')>=2)ins.push({tag:'Emotional resilience',title:'Build the emotional fitness to lead under pressure',text:'Irritability, disconnection, and joylessness are symptoms of emotional energy debt. Schedule non-negotiable time for relationships and activities that restore you. Recovery is not a reward — it is a requirement.'});
+  if(tf('mind')>=2)ins.push({tag:'Mental clarity',title:'Protect your deepest thinking from the noise',text:'Block 90 minutes each morning — before email, before meetings — for your most important cognitive work. The leaders who think best are not smarter; they are simply more disciplined about when and how they think.'});
+  if(tf('spirit')>=2)ins.push({tag:'Purpose alignment',title:'Align your diary with what actually matters',text:'Audit your last week. Does how you spent your time reflect what you say is most important? The gap is not a time problem — it is a clarity and courage problem. Clarify your purpose. Then protect it like a non-negotiable.'});
+  if(tf('planning')>=2)ins.push({tag:'Daily intention',title:'Install a ten-minute daily planning ritual',text:'Each morning, write your top three outcomes for the day — before anything else. Not a to-do list. Three outcomes. What gets planned gets done. What doesn\'t gets crowded out by someone else\'s agenda.'});
+  if(tf('priorities')>=2)ins.push({tag:'High leverage',title:'Name your Most Important Task — and protect it',text:'Before you open your inbox, identify the single task that makes today a success. Put it first. Not after meetings. Not after email. First. The difference between busy leaders and effective ones is this habit alone.'});
+  if(tf('focus')>=2)ins.push({tag:'Deep work',title:'Design your environment to make focus the default',text:'Every interruption costs 23 minutes to fully recover. Remove your phone during focus blocks. Work in 90-minute sprints. The leaders who outperform do not have more hours — they have unbroken ones.'});
+  if(tf('boundaries')>=2)ins.push({tag:'Calendar ownership',title:'Claim your calendar before others do',text:'Block your highest-priority work time on Monday morning before your week fills. Practise the 24-hour pause before accepting new commitments. Every yes to someone else\'s agenda is a no to your own.'});
+  if(tf('recovery')>=2)ins.push({tag:'Weekly review',title:'Close the week — or the week will close you',text:'A 30-minute weekly review — capturing open loops, reviewing commitments, setting your top three outcomes — is the single highest-leverage habit among elite performers. Schedule it. Protect it. Do not skip it.'});
+  if(ins.length===0)ins.push({tag:'Elite tier',title:'You are already operating at a high level',text:'Your self-assessment reveals strong management across all nine dimensions. Your edge now is in the compounding: deeper purpose, greater leverage for those around you, and the discipline to maintain these systems under pressure.'});
+  return ins;
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function countUp(el,target,dur){var c=0,step=dur/target,t=setInterval(function(){c++;el.textContent=c;if(c>=target)clearInterval(t);},step);}
+window.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){
+    var e1=document.getElementById('cu1'),e2=document.getElementById('cu2');
+    if(e1)countUp(e1,9,900);if(e2)countUp(e2,36,600);
+  },500);
+});
+
+function startDiag(){showScreen('screen-diag');renderMeter();renderStep();}
+
+function renderMeter(){
+  var h='';
+  CATS.forEach(function(c,i){
+    var pct=Math.round((tf(c.id)/4)*100);
+    var a=i===S.step?'mcat-active':'';
+    h+='<div class="mcat '+a+'" id="mc-'+c.id+'">'
+      +'<div class="mcat-name">'+c.name+'</div>'
+      +'<div class="mcat-track"><div class="mcat-fill" id="mf-'+c.id+'" style="width:'+pct+'%"></div></div>'
+      +'</div>';
+  });
+  document.getElementById('mBars').innerHTML=h;
+}
+function updateMeterFill(id){var pct=Math.round((tf(id)/4)*100);var el=document.getElementById('mf-'+id);if(el)el.style.width=pct+'%';}
+function updateMeterActive(){CATS.forEach(function(c,i){var el=document.getElementById('mc-'+c.id);if(el){if(i===S.step)el.classList.add('mcat-active');else el.classList.remove('mcat-active');}});}
+function updateProg(){
+  var pct=S.step>=CATS.length?100:Math.round((S.step/CATS.length)*100);
+  var f=document.getElementById('progFill'),l=document.getElementById('stepLbl'),p=document.getElementById('progPct');
+  if(f)f.style.width=pct+'%';if(p)p.textContent=pct+'%';
+  if(l)l.textContent=S.step<CATS.length?'Step '+(S.step+1)+' of '+CATS.length:'Complete';
+}
+
+function renderStep(){
+  if(S.step>=CATS.length){renderResults();return;}
+  updateProg();updateMeterActive();
+  var cat=CATS[S.step];var chks=S.chk[cat.id];
+  var h='<div class="cat-gtag">'+cat.ey+'</div>'
+    +'<div class="cat-name-row"><div class="cat-name-big">'+cat.name+'</div><div class="cat-name-em">— '+cat.em+'</div></div>'
+    +'<div class="cat-desc">'+cat.desc+'</div>'
+    +'<div class="cat-count-badge">Checked: <span class="ccn" id="ccn">'+chks.size+'</span> of 4</div>'
+    +'<div class="check-list">';
+  cat.items.forEach(function(item,i){
+    var on=chks.has(i);
+    h+='<div class="check-item'+(on?' ck':'')+'" id="ci'+i+'" onclick="tog(\''+cat.id+'\','+i+')">'
+      +'<div class="inum">'+(i+1)+'</div>'
+      +'<div class="cb-box'+(on?' ckd':'')+'" id="cb'+cat.id+i+'"><div class="cb-check"></div></div>'
+      +'<div class="itext'+(on?' ckd':'')+'" id="ct'+cat.id+i+'">'+item+'</div>'
+      +'</div>';
+  });
+  h+='</div><div class="nav-row">';
+  if(S.step>0)h+='<button class="btn-back" onclick="goBack()">&#8592; Back</button>';else h+='<div></div>';
+  var last=S.step===CATS.length-1;
+  h+='<button class="btn-next" onclick="goNext()">'+(last?'See my results':'Continue')+'<span class="btn-next-arr">&#8594;</span></button></div>';
+  var sec=document.getElementById('catSection');
+  sec.style.opacity='0';sec.style.transform='translateY(10px)';
+  sec.innerHTML=h;
+  setTimeout(function(){sec.style.transition='opacity .32s ease,transform .32s ease';sec.style.opacity='1';sec.style.transform='translateY(0)';},20);
+}
+
+function tog(id,idx){
+  var s=S.chk[id];if(s.has(idx))s.delete(idx);else s.add(idx);
+  var on=s.has(idx);
+  var box=document.getElementById('cb'+id+idx);var txt=document.getElementById('ct'+id+idx);var item=document.getElementById('ci'+idx);var badge=document.getElementById('ccn');
+  if(box)box.className='cb-box'+(on?' ckd':'');
+  if(txt)txt.className='itext'+(on?' ckd':'');
+  if(item)item.className='check-item'+(on?' ck':'');
+  if(badge){badge.textContent=S.chk[id].size;badge.style.transform='scale(1.3)';setTimeout(function(){badge.style.transform='scale(1)';},150);}
+  updateMeterFill(id);
+}
+function goNext(){S.step++;renderStep();window.scrollTo({top:0,behavior:'smooth'});}
+function goBack(){if(S.step>0){S.step--;renderStep();window.scrollTo({top:0,behavior:'smooth'});}}
+
+function renderResults(){
+  updateProg();
+  showScreen('screen-results');
+  var gt=gT(),et=eT(),tt=tT(),v=overallV(gt),ins=insights();
+  var worst=CATS.slice().sort(function(a,b){return tf(b.id)-tf(a.id);})[0];
+
+  /* topbar */
+  document.getElementById('resTopbar').innerHTML=
+    '<div class="rts-scores">'
+    +'<div class="rts"><span class="rts-num">'+gt+'<span style="font-size:12px;font-weight:300;opacity:.4">/36</span></span><div class="rts-label">Overall</div></div>'
+    +'<div class="rts-div"></div>'
+    +'<div class="rts"><span class="rts-num">'+et+'<span style="font-size:12px;font-weight:300;opacity:.4">/16</span></span><div class="rts-label">Energy</div></div>'
+    +'<div class="rts-div"></div>'
+    +'<div class="rts"><span class="rts-num">'+tt+'<span style="font-size:12px;font-weight:300;opacity:.4">/20</span></span><div class="rts-label">Time</div></div>'
+    +'</div>'
+    +'<button class="btn-back" onclick="restart()" style="font-size:9px;padding:8px 18px">&#8635; Retake</button>';
+
+  /* body */
+  var h='';
+  /* hero */
+  h+='<div class="score-hero">'
+    +'<div class="ring-wrap"><canvas id="ringC" width="200" height="200"></canvas><div class="ring-center"><span class="ring-num" id="ringNum">0</span><div class="ring-denom">out of 36</div></div></div>'
+    +'<div><div class="res-badge">'+v.badge+'</div><div class="res-verdict">'+v.verdict+'</div><div class="res-interp">'+v.interp+'</div></div>'
+    +'</div>';
+  /* radar */
+  h+='<div class="radar-section"><div class="rl">Performance profile</div>'
+    +'<div class="radar-layout"><canvas id="radarC" width="320" height="320"></canvas><div id="radarLeg"></div></div></div>';
+  /* cat cards */
+  h+='<div class="cat-cards"><div class="rl">Category breakdown</div><div class="cat-cards-grid">';
+  CATS.forEach(function(c){
+    var n=tf(c.id);
+    h+='<div class="cc"><div class="cc-ghost">'+n+'</div><div class="cc-group">'+c.group.toUpperCase()+'</div><div class="cc-name">'+c.name+'</div><div class="cc-verdict">'+catV(n)+'</div><div class="cc-bar-bg"><div class="cc-bar-fill" id="cb-'+c.id+'" style="width:0%"></div></div><div class="cc-score">'+n+' / 4 checked</div></div>';
+  });
+  h+='</div></div>';
+  /* focus */
+  h+='<div class="focus-section"><div class="rl">Where to focus first</div>';
+  ins.forEach(function(item){
+    h+='<div class="focus-card"><div class="focus-card-header"><div class="focus-card-title">'+item.title+'</div><div class="focus-card-tag">'+item.tag+'</div></div><div class="focus-card-text">'+item.text+'</div></div>';
+  });
+  h+='</div>';
+  /* programmes */
+  h+='<div class="prog-band">'
+    +'<div class="prog-band-left">'
+    +'<div class="prog-band-eyebrow">The Grow$X Factory · Foundational Protocols</div>'
+    +'<div class="prog-band-title">Your diagnostic is the starting point.<br><em>The programmes are the transformation.</em></div>'
+    +'<div class="prog-band-desc">The Grow$X Factory\'s 10-X Fast-Track Programmes are built for leaders who are done with incremental. Each programme targets a precise pivot point — rebuilding your operating system from the inside out.</div>'
+    +'<div class="prog-pivots"><div class="prog-pivot">01 · Goal</div><div class="prog-pivot">02 · Time</div><div class="prog-pivot">03 · Speed</div><div class="prog-pivot">04 · Status</div><div class="prog-pivot">05 · Impact</div><div class="prog-pivot">06 · Brand</div><div class="prog-pivot">07 · Network</div><div class="prog-pivot">08 · Power</div><div class="prog-pivot">09 · Mindset</div><div class="prog-pivot">10 · Self-Worth</div></div>'
+    +'</div>'
+    +'<div class="prog-band-right">'
+    +'<a class="btn-prog" href="index.html#begin">Explore the programmes &#8594;</a>'
+    +'<a class="btn-prog-ghost" href="index.html#services">View all programmes</a>'
+    +'<a class="btn-prog-ghost" href="mailto:execoach@excelounge.com?subject=10-X%20Strategy%20Session%20Request" style="margin-top:2px">Book a strategy call</a>'
+    +'</div></div>';
+  /* actions */
+  h+='<div class="actions-section"><div class="rl" style="margin-bottom:16px">Go deeper with your results</div>';
+  var ws=encodeURIComponent('10-X Strategy Session — '+worst.name+' Deficit · Energy & Time Diagnostic');
+  var wb=encodeURIComponent('Hello,\n\nI have just completed the Manage Your Energy, Not Just Your Time diagnostic on The Grow$X Factory site.\n\nMy results:\n  Overall score: '+gt+' / 36\n  Energy: '+et+' / 16\n  Time: '+tt+' / 20\n  Biggest deficit: '+worst.name+'\n\nI would love to explore how The Grow$X Factory programmes can help me close these gaps. Please get in touch to arrange a strategy session.\n\nThank you.');
+  var gs=encodeURIComponent('Grow$X Factory — 10-X Programme Enquiry');
+  var gb=encodeURIComponent('Hello,\n\nI recently completed the Energy & Time Management diagnostic (score: '+gt+'/36) and I am interested in learning more about The Grow$X Factory 10-X Fast-Track Programmes.\n\nPlease send me information on how to get started.\n\nThank you.');
+  var actions=[
+    {l:'Book a strategy session around my '+worst.name+' deficit',href:'mailto:execoach@excelounge.com?subject='+ws+'&body='+wb,ext:false,icon:'&#9993;'},
+    {l:'Explore the 10-X programmes built for leaders like me',href:'index.html#services',ext:false,icon:'&#8594;'},
+    {l:'Apply for a fast-track programme place',href:'index.html#begin',ext:false,icon:'&#8594;'},
+    {l:'Contact the Grow$X Factory team directly',href:'mailto:execoach@excelounge.com?subject='+gs+'&body='+gb,ext:false,icon:'&#9993;'}
+  ];
+  actions.forEach(function(x){
+    h+='<a class="action-btn" href="'+x.href+'"'+(x.ext?' target="_blank" rel="noopener"':'')+' style="text-decoration:none"><span>'+x.l+'</span><span class="action-arr">'+x.icon+'</span></a>';
+  });
+  h+='<button class="restart-btn" onclick="restart()">&#8635; Retake the diagnostic</button></div>';
+
+  document.getElementById('resBody').innerHTML=h;
+
+  setTimeout(function(){
+    /* ring */
+    var rn=document.getElementById('ringNum'),c2=0;
+    var t2=setInterval(function(){c2++;if(rn)rn.textContent=c2;if(c2>=gt)clearInterval(t2);},38);
+    drawRing(gt);
+    /* bars */
+    CATS.forEach(function(c){
+      var el=document.getElementById('cb-'+c.id);
+      if(el)setTimeout(function(){el.style.width=Math.round((tf(c.id)/4)*100)+'%';},300);
+    });
+    drawRadar();
+  },120);
+}
+
+function drawRing(score){
+  var cv=document.getElementById('ringC');if(!cv)return;
+  var ctx=cv.getContext('2d'),cx=100,cy=100,r=82,lw=8;
+  ctx.clearRect(0,0,200,200);
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle='rgba(201,168,76,.1)';ctx.lineWidth=lw;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+(score/36)*Math.PI*2);ctx.strokeStyle='#C9A84C';ctx.lineWidth=lw;ctx.lineCap='round';ctx.stroke();
+}
+
+function drawRadar(){
+  var cv=document.getElementById('radarC');if(!cv)return;
+  var ctx=cv.getContext('2d'),W=320,H=320,cx=160,cy=160,maxR=118,n=CATS.length;
+  var angles=CATS.map(function(_,i){return-Math.PI/2+(i/n)*Math.PI*2;});
+  var scores=CATS.map(function(c){return tf(c.id)/4;});
+  ctx.clearRect(0,0,W,H);
+  [.25,.5,.75,1].forEach(function(f){
+    ctx.beginPath();
+    angles.forEach(function(a,i){var r=maxR*f,x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
+    ctx.closePath();ctx.strokeStyle='rgba(201,168,76,.07)';ctx.lineWidth=1;ctx.stroke();
+  });
+  angles.forEach(function(a){ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+maxR*Math.cos(a),cy+maxR*Math.sin(a));ctx.strokeStyle='rgba(201,168,76,.07)';ctx.lineWidth=1;ctx.stroke();});
+  ctx.beginPath();
+  scores.forEach(function(s,i){var r=maxR*s,x=cx+r*Math.cos(angles[i]),y=cy+r*Math.sin(angles[i]);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
+  ctx.closePath();ctx.fillStyle='rgba(201,168,76,.1)';ctx.fill();ctx.strokeStyle='rgba(201,168,76,.55)';ctx.lineWidth=1.5;ctx.stroke();
+  scores.forEach(function(s,i){var r=maxR*s,x=cx+r*Math.cos(angles[i]),y=cy+r*Math.sin(angles[i]);ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle='#C9A84C';ctx.fill();});
+  /* legend */
+  var leg=document.getElementById('radarLeg');if(!leg)return;
+  var lh='';
+  CATS.forEach(function(c){
+    var n2=tf(c.id);
+    lh+='<div class="rl-item"><div class="rl-dot" style="background:rgba(201,168,76,'+(0.25+n2*0.18)+')"></div><div class="rl-name">'+c.name+'</div><div class="rl-bar-wrap"><div class="rl-bar" id="rlb-'+c.id+'" style="width:0%"></div></div><div class="rl-sc">'+n2+'/4</div></div>';
+  });
+  leg.innerHTML=lh;
+  setTimeout(function(){CATS.forEach(function(c){var el=document.getElementById('rlb-'+c.id);if(el)el.style.width=Math.round((tf(c.id)/4)*100)+'%';});},200);
+}
+
+function restart(){
+  S.step=0;CATS.forEach(function(c){S.chk[c.id]=new Set();});
+  showScreen('screen-intro');
+  var e1=document.getElementById('cu1'),e2=document.getElementById('cu2');
+  if(e1){e1.textContent=0;countUp(e1,9,900);}if(e2){e2.textContent=0;countUp(e2,36,600);}
+}
+
+/* CURSOR */
+var cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+var mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
+(function ani(){
+  cur.style.transform='translate('+(mx-3.5)+'px,'+(my-3.5)+'px)';
+  rx+=(mx-rx)*.11;ry+=(my-ry)*.11;
+  ring.style.transform='translate('+(rx-17)+'px,'+(ry-17)+'px)';
+  requestAnimationFrame(ani);
+})();
+</script>
+</body>
+</html>
