@@ -145,7 +145,7 @@ select{background:var(--deep);color:var(--fg);border:1px solid var(--line);font-
 <div class="ring" id="ring" aria-hidden="true"></div>
 <div class="wrap">
   <div class="top">
-    <a class="label" href="index.html">The Grow$X Factory</a>
+    <a class="label" href="index.html">← The Grow$X Factory</a>
     <div class="rail" id="rail" aria-hidden="true"></div>
   </div>
   <main id="stage" aria-live="polite"></main>
@@ -159,7 +159,7 @@ const CONFIG={
   leadEndpoint:'https://formsubmit.co/ajax/execoach@excelounge.com',
   contactEmail:'execoach@excelounge.com',
   // Optional: a booking link (e.g. Calendly). Leave '' to use email.
-  bookingUrl:'',
+  bookingUrl:'index.html#book',
   // Short note emailed to the prospect after they submit. Leave '' to send nothing.
   autoReply:'Thank you for taking The Baseline Reveal. Your full results, including where you settled most and what one step past your horizon looks like, are reviewed in your 90-minute strategy session. Reply to this email to book it. — The Grow$X Factory'
 };
@@ -299,7 +299,7 @@ function reveal(){
     <div class="cta">
       <h3>Your number has a pattern behind it</h3>
       <p class="sub">In a 90-minute strategy session, a seasoned executive walks you through where it comes from, what it is costing, and what one step past your horizon looks like.</p>
-      <div class="row"><a class="btn" href="${esc(book)}" ${CONFIG.bookingUrl?'target="_blank" rel="noopener"':''}>Book the strategy session</a></div>
+      <div class="row"><a class="btn" href="${esc(book)}" ${/^https?:/.test(CONFIG.bookingUrl)?'target="_blank" rel="noopener"':''}>Book the strategy session</a></div>
       <div class="row"><code id="mail">${CONFIG.contactEmail}</code><button class="btn ol" id="copy">Copy</button></div>
       <p class="fine" id="sentNote">${sent===false?'We could not send your results just now. Email us and mention your number.':'Your results have been sent to The Grow$X Factory.'}</p>
     </div>
