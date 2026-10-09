@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Baseline Reveal · The Grow$X Factory</title>
+<meta name="description" content="Where did you settle? A ten-minute diagnostic that shows how far below your own baseline you are operating.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=DM+Sans:opsz,wght@9..40,300..700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one step per screen on a centred stage; progress rail on top; gate before a partial reveal */
+:root{
+  --ink:#0A0900; --deep:#050505; --panel:#12100a; --line:#2a2516;
+  --fg:#efe9da; --muted:#9a927e; --faint:#5e5747;
+  --gold:#C9A84C; --gold-hi:#e6c86a; --gold-dim:rgba(201,168,76,.22);
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--ink)}
+body{background:var(--ink);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;margin:0;padding-inline:clamp(16px,5vw,56px);padding-block:0 40px;-webkit-font-smoothing:antialiased;min-height:100vh}
+@media (pointer:fine){body,button,input,select,label,a{cursor:crosshair}}
+.wrap{max-width:860px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+p{margin:0}
+a{color:var(--gold)}
+.label{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.gold{color:var(--gold)}
+.tab{font-variant-numeric:tabular-nums}
+
+.top{display:flex;justify-content:space-between;align-items:center;padding-block:24px;gap:16px}
+.top a{text-decoration:none}
+.rail{display:flex;gap:6px}
+.rail i{width:24px;height:2px;background:var(--line);display:block}
+.rail i.on{background:var(--gold)}
+
+.screen{position:relative;padding-block:clamp(20px,6vh,64px) 24px;display:grid;gap:26px;animation:rise .45s ease both}
+@keyframes rise{from{transform:translateY(10px)}to{transform:none}}
+.ghost{position:absolute;right:-6px;top:0;font-family:var(--display);font-weight:900;font-stretch:68%;font-size:clamp(130px,24vw,240px);line-height:.8;color:transparent;-webkit-text-stroke:1px rgba(201,168,76,.14);pointer-events:none;user-select:none}
+.q{font-size:clamp(30px,5.4vw,52px);font-weight:700;font-stretch:78%;text-transform:uppercase;line-height:.98;max-width:17ch;position:relative}
+.sub{color:var(--muted);font-size:17px;max-width:54ch;position:relative}
+.sub b{color:var(--fg);font-weight:500}
+
+.hero h1{font-size:clamp(50px,11vw,120px);line-height:.86;font-weight:800;font-stretch:68%;text-transform:uppercase;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .sub{font-size:19px;color:var(--fg);font-weight:300}
+.hero .sub b{color:var(--gold);font-weight:500}
+
+.choices{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+.choices.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.choices.c5{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media (max-width:700px){.choices.c4{grid-template-columns:repeat(2,minmax(0,1fr))}.choices.c5{grid-template-columns:1fr}}
+.ch{background:var(--deep);border:0;color:var(--fg);text-align:left;padding:16px;display:grid;gap:4px;font-family:var(--body);transition:background .15s;align-content:start}
+.ch b{font-family:var(--display);font-size:15px;text-transform:uppercase;letter-spacing:.03em;font-stretch:84%;font-weight:700}
+.ch span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.ch:hover{background:#15120b}
+.ch[aria-pressed="true"]{background:var(--panel);box-shadow:inset 0 -2px 0 var(--gold)}
+.ch[aria-pressed="true"] b{color:var(--gold)}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:1px solid var(--gold);outline-offset:2px}
+
+.seg{display:flex;gap:1px;background:var(--line);border:1px solid var(--line);width:max-content;max-width:100%;flex-wrap:wrap}
+.seg button{background:var(--deep);border:0;color:var(--muted);font-family:var(--body);font-size:13px;padding:9px 13px}
+.seg button[aria-pressed="true"]{background:var(--gold);color:var(--ink);font-weight:600}
+.asking{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+
+.stmts{display:grid;border-top:1px solid var(--line)}
+.st{display:grid;gap:10px;padding-block:16px;border-bottom:1px solid var(--line)}
+.st .t{display:flex;gap:14px;align-items:baseline}
+.st .n{font-family:var(--display);font-weight:800;font-stretch:72%;font-size:20px;color:var(--faint);min-width:28px}
+.st p{font-size:17px}
+.st .seg{margin-left:42px}
+@media (max-width:600px){.st .seg{margin-left:0}}
+
+.nums{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+@media (max-width:600px){.nums{grid-template-columns:1fr}}
+.nf{display:grid;gap:10px;min-width:0}
+.nf .row{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--gold);padding-bottom:6px}
+.nf .pre,.nf .suf{font-family:var(--display);font-size:26px;color:var(--muted);font-stretch:80%}
+.nf input{background:transparent;border:0;color:var(--fg);font-family:var(--display);font-weight:700;font-stretch:75%;font-size:clamp(42px,8vw,64px);width:100%;min-width:0;padding:0;font-variant-numeric:tabular-nums}
+.nf input:focus{outline:none}
+.metric{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+select{background:var(--deep);color:var(--fg);border:1px solid var(--line);font-family:var(--display);font-size:15px;padding:8px 10px;letter-spacing:.03em}
+.hint{font-size:13px;color:var(--faint)}
+.line{background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--fg);font-family:var(--body);font-size:clamp(18px,2.6vw,22px);font-weight:300;padding:10px 0;width:100%}
+.line:focus{outline:none;border-color:var(--gold)}
+.line::placeholder{color:var(--faint)}
+
+/* gate */
+.gate{display:grid;gap:18px;max-width:560px}
+.gate .f{display:grid;gap:6px}
+.consent{font-size:12.5px;color:var(--faint);max-width:56ch}
+.err{font-size:13px;color:var(--gold-hi)}
+
+.nav{display:flex;gap:12px;align-items:center;justify-content:space-between;padding-top:10px}
+.btn{background:var(--gold);color:var(--ink);border:1px solid var(--gold);font-family:var(--display);font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:12.5px;padding:15px 26px;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--gold-hi)}
+.btn[disabled]{opacity:.3}
+.link{background:none;border:0;color:var(--muted);font-family:var(--display);letter-spacing:.2em;text-transform:uppercase;font-size:11px;font-weight:600;padding:8px 0}
+.link:hover{color:var(--gold)}
+
+/* reveal */
+.reveal{gap:30px}
+.bignum{font-family:var(--display);font-weight:800;font-stretch:64%;font-size:clamp(110px,26vw,250px);line-height:.8;color:var(--gold);letter-spacing:-.02em}
+.bignum small{display:block;font-size:clamp(15px,2.2vw,20px);font-stretch:90%;color:var(--fg);letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-top:14px}
+.verdict{font-size:clamp(19px,2.6vw,25px);font-weight:300;line-height:1.42;max-width:40ch}
+.verdict b{color:var(--gold);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--gold)}
+.stat{padding:16px 16px 4px 0;display:grid;gap:6px;align-content:start}
+.stat+.stat{padding-left:16px;border-left:1px solid var(--line)}
+.stat .n{font-family:var(--display);font-weight:700;font-stretch:76%;font-size:clamp(28px,4.4vw,42px);line-height:1}
+.stat .c{font-size:12.5px;color:var(--muted)}
+@media (max-width:560px){.stats{grid-template-columns:1fr}.stat+.stat{padding-left:0;border-left:0;border-top:1px solid var(--line)}}
+
+.bench{display:grid;gap:10px}
+.bench .tr{position:relative;height:14px;background:var(--line)}
+.bench .band{position:absolute;top:0;bottom:0;left:60%;width:15%;background:var(--gold-dim);outline:1px dashed rgba(201,168,76,.5);outline-offset:-1px}
+.bench .mk{position:absolute;top:-7px;width:2px;height:28px;background:var(--gold)}
+.bench .sc{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--faint)}
+.bench p{font-size:15px;color:var(--muted)}
+.bench p b{color:var(--fg);font-weight:500}
+
+.locked{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+@media (max-width:640px){.locked{grid-template-columns:1fr}}
+.lk{background:var(--deep);padding:18px;display:grid;gap:8px;align-content:start}
+.lk .v{font-family:var(--display);font-weight:700;font-stretch:76%;font-size:30px;color:var(--gold);filter:blur(7px);user-select:none}
+.lk .c{font-size:13px;color:var(--muted)}
+.lk .k{font-family:var(--display);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:600}
+
+.cta{border-top:1px solid var(--gold);padding-top:26px;display:grid;gap:16px}
+.cta h3{font-size:clamp(24px,3.8vw,36px);font-weight:700;font-stretch:80%;text-transform:uppercase;line-height:1;max-width:20ch}
+.cta .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.cta code{font-family:var(--mono);font-size:14px;background:var(--panel);border:1px solid var(--line);padding:9px 11px;user-select:all}
+.btn.ol{background:transparent;color:var(--gold);padding:10px 16px}
+.btn.ol:hover{background:var(--gold);color:var(--ink)}
+.fine{font-size:12px;color:var(--faint)}
+
+.ring{position:fixed;left:0;top:0;width:30px;height:30px;margin:-15px 0 0 -15px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:10;opacity:0;transition:width .15s,height .15s,margin .15s}
+@media (prefers-reduced-motion:reduce){.ring{display:none}*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="ring" id="ring" aria-hidden="true"></div>
+<div class="wrap">
+  <div class="top">
+    <a class="label" href="index.html">← The Grow$X Factory</a>
+    <div class="rail" id="rail" aria-hidden="true"></div>
+  </div>
+  <main id="stage" aria-live="polite"></main>
+</div>
+
+<script>
+/* ---------- SETTINGS: edit these ---------- */
+const CONFIG={
+  // Where full results are sent. FormSubmit emails them to the address in the URL.
+  // The first submission triggers a one-time activation email to this address: click it once.
+  leadEndpoint:'https://formsubmit.co/ajax/execoach@excelounge.com',
+  contactEmail:'execoach@excelounge.com',
+  // Optional: a booking link (e.g. Calendly). Leave '' to use email.
+  bookingUrl:'index.html#book',
+  // Short note emailed to the prospect after they submit. Leave '' to send nothing.
+  autoReply:'Thank you for taking The Baseline Reveal. Your full results, including where you settled most and what one step past your horizon looks like, are reviewed in your 90-minute strategy session. Reply to this email to book it. — The Grow$X Factory'
+};
+/* ------------------------------------------ */
+
+const P={'01':'Vision·Horizon','02':'Time·Energy','03':'Mindset·Resilience','04':'Identity·Authorship','05':'Self-Worth·Trust','06':'Network·Relationships','07':'Brand·Voice','08':'Power·Authority','09':'Impact·Bold Bets','10':'Status·Eminence'};
+const CH={
+ csuite:{name:'C-Suite Leaders',d:'CEOs, COOs, CFOs, group heads',m:[['EBITDA','M'],['Revenue','M'],['Total shareholder return','%']],
+  D:[['Accepted a target below what the business could deliver','01'],['Waited for certainty before a strategic move','03'],['Accepted the scope or package offered without negotiating','05'],['Kept someone in a key role you knew should go','08'],['Chose the safe deal over the transformative one','09'],['Let others tell the story of your results','07']]},
+ pevc:{name:'PE & VC Partners',d:'Partners, principals, fund leaders',m:[['Gross MOIC','x'],['Value created across the portfolio','M'],['Fund size','M']],
+  D:[['Sized down a conviction position','09'],['Passed on a deal you believed in because the IC was not ready','03'],['Accepted less allocation or carry than your contribution earned','05'],['Backed a management team you had doubts about','08'],['Stayed in your lane when the opportunity was elsewhere','01'],['Let senior partners own the LP relationships','06']]},
+ founders:{name:'Startup Founders',d:'Pre-seed to Series B',m:[['ARR','M'],['Valuation','M']],
+  D:[['Narrowed the vision to what investors understood','01'],['Raised less, or at a lower valuation, than you aimed for','05'],['Priced below the value you deliver','05'],['Hired for availability rather than excellence','08'],['Delayed a launch until it felt safe','03'],['Ran the company on other people’s urgency','02']]},
+ scaleup:{name:'Scaleup Builders',d:'Growth stage, building the machine',m:[['Revenue','M'],['Valuation','M'],['EBITDA margin','%']],
+  D:[['Agreed growth targets the board found comfortable','01'],['Entered one market when the case was for three','09'],['Kept founding-era structures past their time','04'],['Promoted loyalty over capability','08'],['Accepted the board’s pace over your own','03'],['Under-invested in your own visibility','07']]},
+ family:{name:'Family Groups & Offices',d:'Owners, principals, successors',m:[['Group EBITDA','M'],['Group net asset value','M']],
+  D:[['Deferred a governance decision to keep the peace','08'],['Held on to a legacy business past its prime','04'],['Accepted the senior generation’s pace','03'],['Kept a family member in a role beyond their competence','05'],['Passed on an outside opportunity to avoid family risk','09'],['Kept the group’s story private when visibility would add value','07']]},
+ boards:{name:'Investors & Boards',d:'Non-executive directors, chairs, investors',m:[['Portfolio value','M'],['Annual portfolio return','%']],
+  D:[['Approved a plan you thought lacked ambition','01'],['Stayed silent on a decision you disagreed with','08'],['Deferred to a dominant chair or CEO','04'],['Avoided a leadership change you knew was due','03'],['Accepted a mandate below your experience','05'],['Let your reputation stay in a narrow circle','10']]},
+ career:{name:'Career Builders',d:'Senior professionals on the rise',m:[['Total compensation','K'],['P&L or budget you lead','M']],
+  D:[['Accepted the first offer','05'],['Stayed in a role after you had outgrown it','04'],['Did not go for the role you actually wanted','01'],['Let your manager take credit for your work','07'],['Avoided the stretch assignment','03'],['Kept your network inside your own company','06']]},
+ sovereign:{name:'Elite Sovereigns',d:'Principals of significant private capital',m:[['Capital deployed with conviction','M'],['Net worth','M']],
+  D:[['Spread capital thin instead of making a decisive bet','09'],['Let advisors set your appetite for risk','04'],['Delegated a decision you should have owned','08'],['Chose comfort over a legacy-scale project','01'],['Kept your influence private when it could shape outcomes','10'],['Settled for status over impact','05']]}
+};
+const AS={me:['Myself','you','You','your'],team:['My team','your team','Your team','your team’s'],heir:['As a successor','you','You','your']};
+const TAKE=[[100,'Did not settle'],[90,'Took 90%'],[70,'Took 70%'],[50,'Half or less']];
+const CERT=[[20,'Long shot','I would be surprised'],[40,'Ambitious','Possible, if a lot goes right'],[60,'Likely','More likely than not'],[80,'Expected','I would be surprised if not'],[95,'Inevitable','A foregone conclusion']];
+const ROUTE={me:'GROW$X Blueprint · GROW$XOne (or GROW$XTribe)',team:'GROW$X Blueprint · GROW$XTeam (or Career Kaihagyo · Succession Planning)',heir:'GROW$X Autonomy · NextGen Bespoke (or one-to-one / NextGen Tribe)'};
+
+const fresh=()=>({ch:null,as:'me',take:Array(6).fill(null),metric:0,cur:'€',now:'',edge:'',cert:null,self:'',name:'',email:'',org:''});
+let s=fresh(),step=0,sent=null;const N=6;
+const $=id=>document.getElementById(id);
+const C=()=>CH[s.ch||'csuite'],A=()=>AS[s.as];
+const num=v=>{const n=parseFloat(v);return isFinite(n)?n:0};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function fmt(v){const u=C().m[s.metric][1],c=s.cur,sp=c.length>1?' ':'';const r=v>=100?Math.round(v):Math.round(v*10)/10;
+  if(u==='M')return c+sp+r+'M';if(u==='K')return c+sp+r+'K';if(u==='x')return (Math.round(v*100)/100)+'×';return r+'%';}
+function results(){
+  const settle=Math.round(s.take.reduce((x,y)=>x+y,0)/6),now=num(s.now),edge=num(s.edge);
+  const worst=s.take.map((v,i)=>[v,i]).filter(x=>x[0]<100).sort((p,q)=>p[0]-q[0]||p[1]-q[1]).slice(0,3);
+  return {settle,d:100-settle,now,edge,past:edge/(settle/100),stretch:Math.round((edge/now-1)*100),worst};
+}
+
+function rail(){$('rail').innerHTML=Array.from({length:N},(_,i)=>`<i class="${i<=step?'on':''}"></i>`).join('');}
+function nav(ok,label='Next'){return `<div class="nav">${step>0?'<button class="link" id="back">← Back</button>':'<span></span>'}<button class="btn" id="go" ${ok?'':'disabled'}>${label}</button></div>`;}
+
+function render(){
+  rail();let h='';const a=A();
+  if(step===0){
+    h=`<section class="screen hero">
+      <span class="label gold">The Baseline Reveal</span>
+      <h1>Where did<br>you <em>settle?</em></h1>
+      <p class="sub">Your ceiling is rarely set by talent. It is set by the moments you accepted a little less than you knew was possible. <b>Ten minutes. One number.</b></p>
+      <div class="choices c4" role="group" aria-label="Which describes you">${Object.entries(CH).map(([k,v])=>`<button class="ch" id="c-${k}" data-ch="${k}" aria-pressed="${s.ch===k}"><b>${v.name}</b><span>${v.d}</span></button>`).join('')}</div>
+      <div class="asking"><span class="label">Answering</span><div class="seg" role="group" aria-label="Answering for">${Object.entries(AS).map(([k,v])=>`<button id="as-${k}" data-as="${k}" aria-pressed="${s.as===k}">${v[0]}</button>`).join('')}</div></div>
+      <div class="nav"><span class="hint">Your answers stay private to The Grow$X Factory.</span><button class="btn" id="go" ${s.ch?'':'disabled'}>Begin</button></div>
+    </section>`;
+  }
+  if(step===1){
+    h=`<section class="screen"><div class="ghost">01</div>
+      <span class="label gold">01 · The settling audit</span>
+      <h2 class="q">The decisions that set the ceiling</h2>
+      <p class="sub">Over the last three years, when each of these came up, what did ${a[1]} accept, against what ${a[1]} knew was possible? <b>Every leader settles somewhere.</b> Answer for the typical case.</p>
+      <div class="stmts">${C().D.map((d,i)=>`<div class="st"><div class="t"><span class="n">${String(i+1).padStart(2,'0')}</span><p>${d[0]}</p></div>
+        <div class="seg" role="group" aria-label="${esc(d[0])}">${TAKE.map(([v,l])=>`<button id="t${i}-${v}" data-i="${i}" data-v="${v}" aria-pressed="${s.take[i]===v}">${l}</button>`).join('')}</div></div>`).join('')}</div>
+      ${nav(s.take.every(v=>v!==null))}</section>`;
+  }
+  if(step===2){
+    const m=C().m,u=m[s.metric][1],money=u==='M'||u==='K',suf=u==='x'?'×':u==='%'?'%':u;
+    h=`<section class="screen"><div class="ghost">02</div>
+      <span class="label gold">02 · The Possibility Horizon</span>
+      <h2 class="q">The edge of what ${a[1]} believe${s.as==='team'?'s':''}</h2>
+      <div class="metric"><span class="label">The number ${a[1]} ${s.as==='team'?'is':'are'} judged by</span>
+        <select id="metric">${m.map((x,i)=>`<option value="${i}" ${i===s.metric?'selected':''}>${x[0]}</option>`).join('')}</select>
+        ${money?`<select id="cur" aria-label="Currency">${['€','$','£','AED'].map(c=>`<option ${c===s.cur?'selected':''}>${c}</option>`).join('')}</select>`:''}</div>
+      <div class="nums">
+        <div class="nf"><label class="label" for="now">Today</label><div class="row">${money?`<span class="pre">${s.cur}</span>`:''}<input id="now" type="number" inputmode="decimal" min="0" step="0.1" value="${s.now}" placeholder="0"><span class="suf">${suf}</span></div></div>
+        <div class="nf"><label class="label" for="edge">In three years, at the very edge of belief</label><div class="row">${money?`<span class="pre">${s.cur}</span>`:''}<input id="edge" type="number" inputmode="decimal" min="0" step="0.1" value="${s.edge}" placeholder="0"><span class="suf">${suf}</span></div></div>
+      </div>
+      <p class="hint">Not the plan. The highest number ${a[1]} could say out loud and still believe.</p>
+      ${nav(num(s.now)>0&&num(s.edge)>0)}</section>`;
+  }
+  if(step===3){
+    h=`<section class="screen"><div class="ghost">03</div>
+      <span class="label gold">03 · Ambitious or inevitable</span>
+      <h2 class="q">How certain does it feel?</h2>
+      <p class="sub">That number, three years from now.</p>
+      <div class="choices c5" role="group" aria-label="Certainty">${CERT.map(([v,l,t])=>`<button class="ch" id="k${v}" data-cert="${v}" aria-pressed="${s.cert===v}"><b>${l}</b><span>${t}</span></button>`).join('')}</div>
+      <div class="nf" style="margin-top:8px"><label class="label" for="self">Future self · three years on, how ${s.as==='team'?'is your team':'are you'} described in the room?</label>
+        <input class="line" id="self" type="text" maxlength="240" value="${esc(s.self)}" placeholder="One line. Optional."></div>
+      ${nav(s.cert!==null)}</section>`;
+  }
+  if(step===4){
+    const ok=s.name.trim()&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim());
+    h=`<section class="screen"><div class="ghost">04</div>
+      <span class="label gold">Your number is ready</span>
+      <h2 class="q">Where should we send it?</h2>
+      <form class="gate" id="gate" novalidate>
+        <div class="f"><label class="label" for="name">Name</label><input class="line" id="name" type="text" autocomplete="name" value="${esc(s.name)}" required></div>
+        <div class="f"><label class="label" for="email">Work email</label><input class="line" id="email" type="email" autocomplete="email" value="${esc(s.email)}" required></div>
+        <div class="f"><label class="label" for="org">Company or family group <span style="color:var(--faint)">· optional</span></label><input class="line" id="org" type="text" autocomplete="organization" value="${esc(s.org)}"></div>
+        <p class="consent">By revealing your result you agree that The Grow$X Factory receives your answers and may contact you about them. Nothing is shared with anyone else.</p>
+        <p class="err" id="err" hidden></p>
+        <div class="nav"><button type="button" class="link" id="back">← Back</button><button class="btn" id="go" type="submit" ${ok?'':'disabled'}>Reveal my number</button></div>
+      </form></section>`;
+  }
+  if(step===5) h=reveal();
+  $('stage').innerHTML=h;wire();
+}
+
+function reveal(){
+  const a=A(),c=C(),r=results(),cl=CERT.find(x=>x[0]===s.cert);
+  const first=s.name.trim().split(/\s+/)[0];
+  const book=(CONFIG.bookingUrl&&!/^https?:/.test(CONFIG.bookingUrl))?CONFIG.bookingUrl.replace('#','?baseline='+r.d+'#'):CONFIG.bookingUrl||`mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent('Strategy session · Baseline Reveal')}&body=${encodeURIComponent(`I took The Baseline Reveal: ${r.d} points below baseline. I would like to book the 90-minute strategy session.\n\n${s.name}`)}`;
+  return `<section class="screen reveal">
+    <span class="label gold">${esc(first)}, your result · ${c.name}</span>
+    <div class="bignum tab">−${r.d}<small>points below ${a[3]} baseline</small></div>
+    <p class="verdict">In the decisions that shaped the last three years, ${a[1]} took <b>${r.settle}% of what ${a[1]} knew was possible</b>. The horizon ${a[1]} named a moment ago was drawn by the same hand.</p>
+    <div class="stats">
+      <div class="stat"><span class="label">Settling factor</span><span class="n tab">${r.settle}%</span><span class="c">What ${a[1]} take${s.as==='team'?'s':''} of what is possible</span></div>
+      <div class="stat"><span class="label">Edge of belief</span><span class="n tab">${fmt(r.edge)}</span><span class="c">${r.stretch>=0?'+':''}${r.stretch}% on today</span></div>
+      <div class="stat"><span class="label">Certainty today</span><span class="n">${cl[1]}</span><span class="c">${s.cert>=95?'Then it is not yet the edge':'Not yet inevitable'}</span></div>
+    </div>
+    <div class="bench" aria-label="Your settling factor against the common range">
+      <div class="tr"><div class="band"></div><div class="mk" style="left:calc(${Math.min(99.5,r.settle)}% - 1px)"></div></div>
+      <div class="sc"><span>0%</span><span>50%</span><span>100%</span></div>
+      <p><b>Most leaders we work with take 60–75%</b> of what is possible. It is a pattern, not a verdict. The leaders who move fastest are the ones who see it.</p>
+    </div>
+    <div>
+      <span class="label" style="display:block;margin-bottom:12px">Revealed in your strategy session</span>
+      <div class="locked">
+        <div class="lk"><span class="k">One step past</span><span class="v" aria-hidden="true">000.0</span><span class="c">Your horizon with the settling removed</span></div>
+        <div class="lk"><span class="k">Where ${a[1]} settled most</span><span class="v" aria-hidden="true">00 · 00 · 00</span><span class="c">The three decisions, and the pivots behind them</span></div>
+        <div class="lk"><span class="k">Solving for X</span><span class="v" aria-hidden="true">X = ?</span><span class="c">What becomes visible from one step past</span></div>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Your number has a pattern behind it</h3>
+      <p class="sub">In a 90-minute strategy session, a seasoned executive walks you through where it comes from, what it is costing, and what one step past your horizon looks like.</p>
+      <div class="row"><a class="btn" href="${esc(book)}" ${/^https?:/.test(CONFIG.bookingUrl)?'target="_blank" rel="noopener"':''}>Book the strategy session</a></div>
+      <div class="row"><code id="mail">${CONFIG.contactEmail}</code><button class="btn ol" id="copy">Copy</button></div>
+      <p class="fine" id="sentNote">${sent===false?'We could not send your results just now. Email us and mention your number.':'Your results have been sent to The Grow$X Factory.'}</p>
+    </div>
+    <p class="fine">A self-assessment, not a psychometric test. Your answers stay private to The Grow$X Factory.</p>
+  </section>`;
+}
+
+async function submit(){
+  const c=C(),a=A(),r=results(),cl=CERT.find(x=>x[0]===s.cert);
+  const body={
+    _subject:`Baseline Reveal · ${s.name} · −${r.d} pts · ${c.name}`,
+    _template:'table',_captcha:'false',
+    ...(CONFIG.autoReply?{_autoresponse:CONFIG.autoReply}:{}),
+    name:s.name.trim(),email:s.email.trim(),organisation:s.org.trim()||'—',
+    chapter:c.name,answering_for:AS[s.as][0],
+    points_below_baseline:r.d,settling_factor:r.settle+'%',
+    metric:c.m[s.metric][0],today:fmt(r.now),edge_of_belief_3y:fmt(r.edge),stretch_on_today:r.stretch+'%',
+    one_step_past:fmt(r.past),certainty:cl[1],future_self:s.self.trim()||'— unwritten —',
+    settled_most:r.worst.map(([v,i])=>`${c.D[i][1]} ${P[c.D[i][1]]} (${v}%): ${c.D[i][0]}`).join(' | ')||'none named',
+    entry_point:r.worst.length&&+c.D[r.worst[0][1]][1]>5?'SCALE (06–10)':'PRIME (01–05)',
+    suggested_route:ROUTE[s.as],
+    audit:c.D.map((d,i)=>`${d[0]}: ${s.take[i]}%`).join(' | ')
+  };
+  try{
+    const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),12000);
+    const res=await fetch(CONFIG.leadEndpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body),signal:ctl.signal});
+    clearTimeout(t);return res.ok;
+  }catch(e){return false}
+}
+
+function grab(){['now','edge','self','name','email','org'].forEach(k=>{if($(k))s[k]=$(k).value});if($('cur'))s.cur=$('cur').value;}
+function wire(){
+  const go=$('go');
+  if(go&&step!==4)go.onclick=()=>{grab();step++;render();scrollTo({top:0})};
+  const bk=$('back');if(bk)bk.onclick=()=>{grab();step--;render()};
+  document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{if(s.ch!==b.dataset.ch){s.take=Array(6).fill(null);s.metric=0;s.now='';s.edge=''}s.ch=b.dataset.ch;render()});
+  document.querySelectorAll('[data-as]').forEach(b=>b.onclick=()=>{s.as=b.dataset.as;render()});
+  document.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{s.take[+b.dataset.i]=+b.dataset.v;render()});
+  document.querySelectorAll('[data-cert]').forEach(b=>b.onclick=()=>{grab();s.cert=+b.dataset.cert;render()});
+  const mt=$('metric');if(mt)mt.onchange=()=>{grab();s.metric=+mt.value;render()};
+  const cu=$('cur');if(cu)cu.onchange=()=>{grab();render()};
+  ['now','edge'].forEach(k=>{const el=$(k);if(el)el.oninput=()=>{grab();$('go').disabled=!(num(s.now)>0&&num(s.edge)>0)}});
+  const gate=$('gate');
+  if(gate){
+    const check=()=>{grab();$('go').disabled=!(s.name.trim()&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim()))};
+    ['name','email','org'].forEach(k=>$(k).oninput=check);
+    gate.onsubmit=async e=>{e.preventDefault();grab();
+      if(!s.name.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())){const er=$('err');er.textContent='Add your name and a valid email to see your result.';er.hidden=false;return}
+      const g=$('go');g.disabled=true;g.textContent='Calculating…';
+      sent=await submit();step=5;render();scrollTo({top:0});};
+  }
+  const cp=$('copy');if(cp)cp.onclick=()=>{const t=$('mail').textContent,ok=()=>cp.textContent='Copied',sel=()=>{const r=document.createRange();r.selectNodeContents($('mail'));const g=getSelection();g.removeAllRanges();g.addRange(r);cp.textContent='Selected'};
+    try{navigator.clipboard.writeText(t).then(ok,sel)}catch(e){sel()}};
+}
+render();
+
+(function(){const r=$('ring');if(!matchMedia('(pointer:fine)').matches||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  addEventListener('pointermove',e=>{r.style.opacity=1;r.style.transform=`translate(${e.clientX}px,${e.clientY}px)`});
+  addEventListener('pointerover',e=>{const a=e.target.closest('button,a,input,select');r.style.width=r.style.height=a?'44px':'30px';r.style.margin=a?'-22px 0 0 -22px':'-15px 0 0 -15px'});
+  document.addEventListener('pointerleave',()=>r.style.opacity=0);})();
+</script>
+</body>
+</html>
