@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Book your session · The Grow$X Factory</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="For GROW$X clients: book your Zero Point, Innerscape, PRIME and SCALE sessions.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000'/%3E%3Crect x='3' y='3' width='58' height='58' fill='none' stroke='%23C9A84C' stroke-width='2'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Helvetica,Arial,sans-serif' font-size='30' font-weight='300' fill='%23C9A84C'%3E$X%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..600&family=DM+Mono:wght@300;400;500&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0a0905;--s1:#110f09;--s2:#17140c;--ln:rgba(201,168,76,.22);--ln2:rgba(244,239,226,.12);--ink:#f4efe2;--mu:rgba(244,239,226,.66);--dim:rgba(244,239,226,.45);--gold:#C9A84C}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "Inter",system-ui,sans-serif}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+header.top{border-bottom:1px solid var(--ln2)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:72px}
+.brand{display:flex;align-items:baseline;gap:10px;text-decoration:none}
+.bw{font:600 20px "Inter",system-ui,sans-serif;letter-spacing:.02em}.bw i{font-style:normal;color:var(--gold)}.bw b{font-weight:600;color:var(--gold)}
+.bt{font:400 11px "DM Mono",monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--mu)}
+.toplinks{display:flex;gap:18px;font-size:14px;color:var(--mu)}.toplinks a{text-decoration:none}.toplinks a:hover{color:var(--gold)}
+.hero{padding:64px 0 28px}
+.k{font:400 12px "DM Mono",monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:0 0 14px}
+h1{font:300 clamp(34px,4.6vw,56px)/1.08 "Inter",system-ui,sans-serif;margin:0 0 16px;letter-spacing:-.01em}h1 em{font-style:normal;color:var(--gold)}
+.lede{color:var(--mu);max-width:60ch;margin:0}
+.steps{display:grid;gap:22px;padding:28px 0 80px}
+.step{border:1px solid var(--ln);background:var(--s1);padding:24px clamp(18px,3vw,32px) 26px}
+.step.dim{opacity:.45;pointer-events:none}
+.sh{display:flex;gap:14px;align-items:baseline;margin-bottom:16px}
+.sn{font:400 12px "DM Mono",monospace;color:var(--bg);background:var(--gold);width:24px;height:24px;display:inline-grid;place-items:center;flex:none}
+.sh h2{font:400 20px/1.3 "Inter",system-ui,sans-serif;margin:0}
+.opts{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.o{appearance:none;text-align:left;border:1px solid var(--ln2);background:var(--s2);color:var(--ink);padding:14px 16px;cursor:pointer;font:inherit;display:grid;gap:3px;min-height:64px;transition:border-color .2s,background .2s}
+.o b{font-weight:500;font-size:15.5px}.o span{font-size:13px;color:var(--mu)}
+.o small{font:400 11px "DM Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.o:hover{border-color:var(--gold)}
+.o[aria-pressed="true"]{border-color:var(--gold);background:rgba(201,168,76,.14)}
+.o[disabled]{opacity:.4;cursor:not-allowed}
+.sub{font:400 11px "DM Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:18px 0 10px}
+.pv{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.pv .o{min-height:56px;text-align:center;padding:10px 6px}.pv .o b{font-size:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13px;color:var(--mu);margin:0 0 6px}
+input,textarea{width:100%;background:var(--s2);border:1px solid var(--ln2);color:var(--ink);font:inherit;font-size:16px;padding:12px 14px;border-radius:0}
+input:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:0;border-color:var(--gold)}
+textarea{min-height:96px;resize:vertical}
+.f{margin-bottom:14px}
+.btn{appearance:none;border:1px solid var(--gold);background:var(--gold);color:var(--bg);font:500 15px "Inter",system-ui,sans-serif;padding:14px 22px;cursor:pointer;min-height:48px}
+.btn.ol{background:none;color:var(--ink)}
+.btn:hover{filter:brightness(1.08)}
+.note{font-size:13.5px;color:var(--mu);margin:12px 0 0}
+.note b{color:var(--ink);font-weight:500}
+.sum{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.sum span{font:400 12px "DM Mono",monospace;letter-spacing:.08em;border:1px solid var(--ln);padding:5px 10px;color:var(--ink)}
+.cal{min-height:700px;border:1px solid var(--ln2);background:#fff}
+.done{border:1px solid var(--gold);padding:20px;background:rgba(201,168,76,.08)}
+.err{color:#e8a87c;font-size:14px}
+.cohort{border-left:2px solid var(--gold);padding:10px 14px;background:var(--s2);font-size:14.5px;color:var(--mu);margin-top:14px}
+.cohort b{color:var(--ink);font-weight:500}
+.pol{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:4px}
+.pol div{border-top:1px solid var(--ln);padding-top:10px;font-size:14px;color:var(--mu)}.pol b{display:block;color:var(--ink);font-weight:500;margin-bottom:2px}
+footer{border-top:1px solid var(--ln2);padding:28px 0 calc(28px + env(safe-area-inset-bottom));font-size:13px;color:var(--dim)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between}
+footer a{color:var(--gold);text-decoration:none}
+[hidden]{display:none!important}
+@media (max-width:640px){.pv{grid-template-columns:repeat(5,1fr);gap:6px}.pv .o{padding:8px 2px}.row{grid-template-columns:1fr}.toplinks .hide-s{display:none}.hero{padding:44px 0 18px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="index.html" aria-label="The Grow$X Factory, home"><span class="bw">GROW<i>$</i><b>X</b></span><span class="bt">The Factory</span></a>
+  <nav class="toplinks" aria-label="Site"><a class="hide-s" href="programmes.html">The routes</a><a href="factory.html#book">Not a client yet? Book a Strategy Session</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="k">For GROW$X clients</p>
+    <h1>Book your <em>session.</em></h1>
+    <p class="lede">Choose your programme and the session you need. Your executive’s live calendar opens, or we confirm a time with you within 1 working day.</p>
+  </section>
+
+  <div class="steps">
+    <section class="step" id="s1" aria-labelledby="h1t">
+      <div class="sh"><span class="sn">1</span><h2 id="h1t">Your programme</h2></div>
+      <div class="opts" id="progs"></div>
+      <p class="sub">Your format</p>
+      <div class="opts" id="fmts"></div>
+    </section>
+
+    <section class="step dim" id="s2" aria-labelledby="h2t">
+      <div class="sh"><span class="sn">2</span><h2 id="h2t">Your session</h2></div>
+      <div class="opts" id="types"></div>
+      <div id="pivotBox" hidden>
+        <p class="sub">Which pivot?</p>
+        <div class="pv" id="pivots"></div>
+      </div>
+      <div class="cohort" id="cohortNote" hidden></div>
+    </section>
+
+    <section class="step dim" id="s3" aria-labelledby="h3t">
+      <div class="sh"><span class="sn">3</span><h2 id="h3t">Book it</h2></div>
+      <div class="sum" id="sum"></div>
+      <div class="row">
+        <div class="f"><label for="nm">Your name</label><input id="nm" autocomplete="name" required></div>
+        <div class="f"><label for="em">Your email</label><input id="em" type="email" autocomplete="email" required></div>
+      </div>
+      <div id="calBox" hidden>
+        <button class="btn" type="button" id="openCal">Choose a time <span aria-hidden="true">→</span></button>
+        <div class="cal" id="cal" hidden></div>
+      </div>
+      <form id="req" hidden>
+        <div class="f"><label for="times">Times that suit you (with your time zone)</label><textarea id="times" required placeholder="e.g. Tue 4 Nov or Thu 6 Nov, 09:00–12:00 Dubai time"></textarea></div>
+        <div class="f"><label for="msg">Anything to prepare? <i>· optional</i></label><textarea id="msg" placeholder="An experiment to review, a decision coming up…"></textarea></div>
+        <button class="btn" type="submit" id="send">Request this session <span aria-hidden="true">→</span></button>
+        <p class="note">We confirm a time within 1 working day, with a calendar invite.</p>
+        <p class="err" id="err" hidden></p>
+      </form>
+      <div class="done" id="done" hidden></div>
+    </section>
+
+    <section class="step" aria-labelledby="h4t">
+      <div class="sh"><span class="sn">i</span><h2 id="h4t">Good to know</h2></div>
+      <div class="pol">
+        <div><b>Rhythm</b>1 pivot a month, 1 session a week: PRIME 1, PRIME 2, SCALE 1, SCALE 2.</div>
+        <div><b>Changes</b>Reschedule or cancel up to 48 hours before, from your confirmation email.</div>
+        <div><b>Late changes</b>Sessions moved within 48 hours count as held.</div>
+        <div><b>Cohort sessions</b>Tribe and team sessions are scheduled for the whole group and sent as calendar invites.</div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer><div class="wrap"><span>© 2026 The Grow$X Factory · growxfactory.com</span><span><a href="index.html">Home</a> · <a href="programmes.html">The routes</a> · <a href="mailto:info@growxfactory.com">info@growxfactory.com</a></span></div></footer>
+
+<script>
+/* ---------- SETTINGS: edit these ----------
+   Paste a scheduling link (Calendly or Cal.com event URL) for each session type.
+   Empty = the page takes a request instead and emails it to REQUEST_EMAIL. */
+const SETTINGS={
+  REQUEST_ENDPOINT:'https://formsubmit.co/ajax/athina@growxfactory.com',
+  LINKS:{
+    zero:'',      // Zero Point · Diagnose (90 min)
+    inner:'',     // Innerscape · interpretation (90 min)
+    prime1:'',    // PRIME 1 · Understand (90 min)
+    prime2:'',    // PRIME 2 · Analyse (90 min)
+    scale1:'',    // SCALE 1 · Model (60 min)
+    scale2:'',    // SCALE 2 · Apply (60 min)
+    one2one:'',   // Member 1:1 for Team and Tribe (60 min)
+    close:'',     // Close · X measured (90 min)
+    strategy:'https://calendly.com/execoach-excelounge/executive-leadership-coaching-one2one'
+  }
+};
+/* ------------------------------------------ */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PROGS=[
+ {k:'axon',n:'GROW$X Axon',s:'Route 1 · The Seat'},
+ {k:'apogee',n:'GROW$X Apogee',s:'Route 2 · The Career'},
+ {k:'autonomy',n:'GROW$X Autonomy',s:'Route 3 · The Legacy'},
+ {k:'innerscape',n:'INNERSCAPE',s:'Standalone'},
+ {k:'prime',n:'PRIME',s:'Standalone'},
+ {k:'iprime',n:'INNERSCAPE + PRIME',s:'Bundle'}];
+const FMTS={one:['One','One-to-one'],team:['Team','Team or bespoke'],tribe:['Tribe','Peer cohort']};
+const TYPES=[
+ {k:'zero',n:'Zero Point',s:'Diagnose · 90 min',for:'all'},
+ {k:'inner',n:'Innerscape',s:'Interpretation · 90 min',for:'inner'},
+ {k:'prime1',n:'PRIME 1',s:'Understand · 90 min',pivot:1,for:'prime'},
+ {k:'prime2',n:'PRIME 2',s:'Analyse · 90 min',pivot:1,for:'prime'},
+ {k:'scale1',n:'SCALE 1',s:'Model · 60 min',pivot:1,for:'scale'},
+ {k:'scale2',n:'SCALE 2',s:'Apply · 60 min',pivot:1,for:'scale'},
+ {k:'one2one',n:'Your 1:1',s:'Team and Tribe members · 60 min',for:'member'},
+ {k:'close',n:'Close',s:'X measured · 90 min',for:'full'}];
+const PV=['Vision','Time','Mindset','Identity','Conviction','Network','Brand','Leverage','Impact','Status'];
+const st={prog:'',fmt:'',type:'',pivot:''};
+function q(){try{return new URLSearchParams(location.search)}catch(_){return new URLSearchParams()}}
+function allowed(t){const p=st.prog,f=st.fmt,full=['axon','apogee','autonomy'].includes(p);
+  if(t.for==='all')return true;
+  if(t.for==='inner')return p!=='prime';
+  if(t.for==='prime')return p!=='innerscape';
+  if(t.for==='scale'||t.for==='full')return full;
+  if(t.for==='member')return f!=='one';
+  return true;}
+function grouped(t){return st.fmt!=='one'&&['prime1','prime2','scale1','scale2','zero','close'].includes(t.k);}
+function render(){
+  $('progs').innerHTML=PROGS.map(p=>'<button type="button" class="o" data-prog="'+p.k+'" aria-pressed="'+(st.prog===p.k)+'"><small>'+esc(p.s)+'</small><b>'+esc(p.n)+'</b></button>').join('');
+  $('fmts').innerHTML=Object.keys(FMTS).map(k=>'<button type="button" class="o" data-fmt="'+k+'" aria-pressed="'+(st.fmt===k)+'"><b>'+FMTS[k][0]+'</b><span>'+FMTS[k][1]+'</span></button>').join('');
+  const ok1=st.prog&&st.fmt;$('s2').classList.toggle('dim',!ok1);
+  $('types').innerHTML=TYPES.map(t=>{const a=ok1&&allowed(t);return '<button type="button" class="o" data-type="'+t.k+'" aria-pressed="'+(st.type===t.k)+'"'+(a?'':' disabled')+'><b>'+esc(t.n)+'</b><span>'+esc(t.s)+'</span></button>';}).join('');
+  const T=TYPES.find(t=>t.k===st.type);
+  $('pivotBox').hidden=!(T&&T.pivot);
+  $('pivots').innerHTML=PV.map((n,i)=>{const v=String(i+1).padStart(2,'0');return '<button type="button" class="o" data-pivot="'+v+'" aria-pressed="'+(st.pivot===v)+'"><b>'+v+'</b><span>'+n+'</span></button>';}).join('');
+  const cn=$('cohortNote');
+  if(T&&grouped(T)){cn.hidden=false;cn.innerHTML='<b>'+(st.fmt==='tribe'?'Tribe':'Team')+' sessions are scheduled for the whole group</b> and arrive as calendar invites. Use this to request a change, or book <b>Your 1:1</b> instead.';}else cn.hidden=true;
+  const ok2=ok1&&T&&(!T.pivot||st.pivot);$('s3').classList.toggle('dim',!ok2);
+  if(ok2){
+    const P=PROGS.find(p=>p.k===st.prog);
+    $('sum').innerHTML=[P.n,FMTS[st.fmt][0],T.n+' · '+T.s].concat(st.pivot?['Pivot '+st.pivot+' · '+PV[+st.pivot-1]]:[]).map(x=>'<span>'+esc(x)+'</span>').join('');
+    const link=SETTINGS.LINKS[st.type];
+    $('calBox').hidden=!link||(T&&grouped(T));$('req').hidden=!!link&&!grouped(T);
+    $('cal').hidden=true;$('cal').innerHTML='';
+  }
+}
+function label(){const P=PROGS.find(p=>p.k===st.prog),T=TYPES.find(t=>t.k===st.type);return P.n+' · '+FMTS[st.fmt][0]+' · '+T.n+(st.pivot?' · Pivot '+st.pivot+' '+PV[+st.pivot-1]:'');}
+function needDetails(){const n=$('nm').value.trim(),e=$('em').value.trim();if(!n||!/^\S+@\S+\.\S+$/.test(e)){(!n?$('nm'):$('em')).focus();return null;}return {n,e};}
+document.addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;
+  if(b.dataset.prog){st.prog=b.dataset.prog;st.type='';st.pivot='';render();return;}
+  if(b.dataset.fmt){st.fmt=b.dataset.fmt;st.type='';st.pivot='';render();return;}
+  if(b.dataset.type){st.type=b.dataset.type;if(!TYPES.find(t=>t.k===st.type).pivot)st.pivot='';render();return;}
+  if(b.dataset.pivot){st.pivot=b.dataset.pivot;render();return;}
+  if(b.id==='openCal'){const d=needDetails();if(!d)return;
+    const u=new URL(SETTINGS.LINKS[st.type]);u.searchParams.set('name',d.n);u.searchParams.set('email',d.e);u.searchParams.set('a1',label());
+    u.searchParams.set('hide_gdpr_banner','1');
+    const c=$('cal');c.hidden=false;c.innerHTML='<iframe title="Choose a time" src="'+esc(u.toString())+'" style="width:100%;height:700px;border:0"></iframe>';c.scrollIntoView({behavior:'smooth',block:'start'});}
+});
+$('req').addEventListener('submit',async ev=>{ev.preventDefault();const d=needDetails();if(!d)return;
+  const times=$('times').value.trim();if(!times){$('times').focus();return;}
+  const data={_subject:'Session request · '+label()+' · '+d.n,_template:'table',_captcha:'false',Name:d.n,Email:d.e,_replyto:d.e,Session:label(),'Preferred times':times,Notes:$('msg').value.trim()};
+  const btn=$('send');btn.disabled=true;$('err').hidden=true;
+  try{const r=await fetch(SETTINGS.REQUEST_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)});
+    if(!r.ok)throw 0;$('req').hidden=true;$('done').hidden=false;
+    $('done').innerHTML='<p class="k" style="margin:0 0 8px">Request received</p><p style="margin:0">'+esc(label())+'. We confirm a time within 1 working day, with a calendar invite to '+esc(d.e)+'.</p>';
+  }catch(_){btn.disabled=false;const mail='mailto:athina@growxfactory.com?subject='+encodeURIComponent('Session request · '+label())+'&body='+encodeURIComponent('Name: '+d.n+'\nEmail: '+d.e+'\nSession: '+label()+'\nPreferred times: '+times+'\nNotes: '+$('msg').value.trim());
+    $('err').hidden=false;$('err').innerHTML='We could not send this from the page. <a href="'+mail+'" style="color:#C9A84C">Send it by email instead</a>.';}
+});
+/* prefill from a link, e.g. sessions.html?prog=axon&fmt=one&type=prime1&pivot=03 */
+(function(){const Q=q();['prog','fmt','type','pivot'].forEach(k=>{const v=Q.get(k);if(v)st[k]=v;});
+  try{const L=JSON.parse(localStorage.getItem('gx_lead')||'{}');if(L.name)$('nm').value=L.name;if(L.email)$('em').value=L.email;}catch(_){}
+  if(Q.get('name'))$('nm').value=Q.get('name');if(Q.get('email'))$('em').value=Q.get('email');render();})();
+</script>
+</body>
+</html>
